@@ -1,0 +1,1 @@
+<Icon name="check" size={70} color="#0f0" />

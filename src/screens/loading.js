@@ -1,0 +1,1 @@
+<ActivityIndicator size="large" color={"#00f"}></ActivityIndicator>
