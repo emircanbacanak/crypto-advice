@@ -1,11 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'  //rnfs
 import React from 'react'
+import AuthContent from '../companents/AuthContent'
 
 export default function SignupScreen() {
   return (
-    <View>
-      <Text>SignupScreen</Text>
-    </View>
+    <AuthContent/>
   )
 }
 

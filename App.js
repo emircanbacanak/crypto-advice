@@ -10,20 +10,28 @@ const Stack = createNativeStackNavigator();
 function NormalStack() {
   return (
     < Stack.Navigator screenOptions={{
-      headerStyle:{
-        backgroundColor:'#2516FA',
+      headerStyle: {
+        backgroundColor: '#2516FA',
       },
-      headerTintColor:'#fff',
-      contentStyle:{
-        backgroundColor:'#fff'
+      headerTintColor: '#fff',
+      contentStyle: {
+        backgroundColor: '#fff'
       }
     }} >
-      <Stack.Screen name="Login" component={LoginScreen} 
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
         options={{
-          headerTitle:'Kullanıcı Giriş'
+          headerTitle: 'Kullanıcı Giriş'
         }}
       />
-      <Stack.Screen name="Signup" component={SignupScreen} />
+      <Stack.Screen 
+      name="Signup" 
+      component={SignupScreen} 
+      options={{
+        headerTitle: 'Kullanıcı Kayıt'
+      }}
+      />
     </Stack.Navigator >
   )
 }
@@ -41,6 +49,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderBlockColor:'#fff'
+    borderBlockColor: '#fff'
   }
 });
