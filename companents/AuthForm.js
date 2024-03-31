@@ -3,23 +3,32 @@ import React, { useState } from 'react'
 import Input from './Input'
 import Button from './Button'
 
-export default function AuthForm({ isLogin, onSubmit, credentialsInValid }) {
+export default function AuthForm({ isLogin, onsubmit, credentialsInValid }) {
+
     const [enteredEmail, setEnteredEmail] = useState('')
     const [enteredPassword, setEnteredPassword] = useState('')
     const [enteredConfirmEmail, setEnteredConfirmEmail] = useState('')
     const [enteredConfirmPassword, setEnteredConfirmPassword] = useState('')
 
 
+
     const {
-        email: emailIsValid,
+        email: emailIsInvalid,
         confirmEmail: emailsDontMach,
-        password: passwordIsValid,
+        password: passwordIsInvalid,
         confirmPassword: passwordDontMach,
-    } = credentialsInValid;
+    } = credentialsInValid
 
-    console.log(emailIsValid, emailsDontMach, passwordIsValid, passwordDontMach);
-
-    const updateInput = (inputType, enteredValue) => {
+    console.log(emailIsInvalid, emailsDontMach, passwordIsInvalid, passwordDontMach);
+    function submitHandler() {
+        onsubmit({
+            email: enteredEmail,
+            confirmEmail: enteredConfirmEmail,
+            password: enteredPassword,
+            confirmPassword: enteredConfirmPassword,
+        })
+    }
+    function updateInput(inputType, enteredValue) {
         switch (inputType) {
             case 'email':
                 setEnteredEmail(enteredValue)
@@ -33,57 +42,44 @@ export default function AuthForm({ isLogin, onSubmit, credentialsInValid }) {
             case 'confirmPassword':
                 setEnteredConfirmPassword(enteredValue)
                 break;
-            default:
-                break;
         }
     }
-
-    const submitHandler = () => {
-        onSubmit({
-            email: enteredEmail,
-            confirmEmail: enteredConfirmEmail,
-            password: enteredPassword,
-            confirmPassword: enteredConfirmPassword,
-        });
-    };
 
     return (
         <View>
             <Input
                 label="Email"
                 keyboardType="email-address"
-                onUpdateValue={(value) => updateInput('email', value)}
+                onUpdateValue={updateInput.bind(this, 'email')}
                 value={enteredEmail}
-                isInvalid={emailIsValid}
+                isInvalid={emailIsInvalid}
             />
             {!isLogin && (
                 <Input
                     label="Email Doğrula"
                     keyboardType="email-address"
-                    onUpdateValue={(value) => updateInput('confirmEmail', value)}
+                    onUpdateValue={updateInput.bind(this, 'confirmEmail')}
                     value={enteredConfirmEmail}
                     isInvalid={emailsDontMach}
-                />
-            )}
+                />)}
             <Input
                 label="Şifre"
                 secure
-                onUpdateValue={(value) => updateInput('password', value)}
+                onUpdateValue={updateInput.bind(this, 'password')}
                 value={enteredPassword}
-                isInvalid={passwordIsValid}
+                isInvalid={passwordIsInvalid}
             />
             {!isLogin && (
                 <Input
-                    label="Şifre Doğrula"
+                    label="Şifreyi Doğrula"
                     secure
-                    onUpdateValue={(value) => updateInput('confirmPassword', value)}
+                    onUpdateValue={updateInput.bind(this, 'confirmPassword')}
                     value={enteredConfirmPassword}
                     isInvalid={passwordDontMach}
-                />
-            )}
+                />)}
             <View style={styles.buttons}>
-                <Button onPress={submitHandler}>
-                    {isLogin ? 'Giriş Yap' : 'Kaydol'}
+                <Button onPress={submitHandler} >
+                    {isLogin ? 'Giriş Yap' : 'Kaydol '}
                 </Button>
             </View>
         </View>

@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View , TextInput } from 'react-native'
+import { StyleSheet, Text, View, TextInput } from 'react-native'
 import React from 'react'
 
-export default function input({
+export default function Input({
   label,
   keyboardType,
   onUpdateValue,
@@ -11,37 +11,37 @@ export default function input({
 }) {
   return (
     <View style={styles.inputContainer}>
-      <Text style={[styles.label,isInvalid && styles.labelInValid]}>{label}</Text>
-      <TextInput style={[styles.textInput , isInvalid && styles.inputInValid]}
-      autoCapitalize='none'
-      keyboardType={keyboardType}
-      onChangeText={onUpdateValue}
-      value={value}
-      secureTextEntry={secure}
-      />
+      <Text style={[styles.label, isInvalid && styles.labelInvalid]}>{label}</Text>
+      <TextInput
+        style={[styles.input, isInvalid && styles.inputInvalid]}
+        autoCapitalize='none'
+        keyboardType={keyboardType}
+        onChangeText={onUpdateValue}
+        value={value}
+        secureTextEntry={secure} />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  inputContainer:{
-    marginVertical:8,
+  inputContainer: {
+    marginVertical: 8,
   },
-  label:{
-    color:'#fff',
-    marginBottom:3,
+  label: {
+    color: '#fff',
+    marginBottom: 3,
   },
-  labelInValid:{
-    color:'#f00'
+  labelInvalid: {
+    color: '#f00'
   },
-  textInput:{
-    backgroundColor:'#FDFFE4',
-    paddingVertical:4,
-    paddingHorizontal:10,
-    borderRadius:20,
-    fontSize:16,
+  input: {
+    backgroundColor: '#FDFFE4',
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+    fontSize: 16,
   },
-  inputInValid:{
-    backgroundColor:'#f00'
+  inputInvalid: {
+    backgroundColor: '#f00'
   },
 });

@@ -4,57 +4,56 @@ import AuthForm from './AuthForm'
 import ButtonWhite from './ButtonWhite'
 import { useNavigation } from '@react-navigation/native'
 
-export default function AuthContent({ isLogin }) {
+export default function AuthContent({ isLogin, onAuthenticate }) {
     const navigation = useNavigation();
+
     const [credentialsInValid, setCredentialsInValid] = useState({
         email: false,
         password: false,
         confirmEmail: false,
         confirmPassword: false,
-    });
+    })
 
     function submitHandler(credentials) {
-        console.log("Credentials:", credentials);
-        let { confirmEmail, confirmPassword, email, password } = credentials
+        console.log(credentials);
+        let { confirmEmail, confirmPassword, email, password } = credentials;
 
         email = email.trim();
         password = password.trim();
 
+        //şartları karşılayan true oluyor
         const emailIsValid = email.includes('@');
         const passwordIsValid = password.length > 6;
-        const emailsAreEquil = email === confirmEmail;
-        const passwordAreEquil = password === confirmPassword;
+        const emailsAreEqual = email === confirmEmail;
+        const passwordAreEqual = password === confirmPassword;
 
-        if (
-            !emailIsValid ||
-            !passwordIsValid ||
-            (!isLogin && (!emailsAreEquil || !passwordAreEquil))) {
-            Alert.alert('Hops! Lütfen Girdiğiniz Değerleri Kontrol Ediniz!');
-            setCredentialsInValid({ //doğru formatta girilenler false oluyor
+        if (!emailIsValid || !passwordIsValid || (!isLogin && (!emailsAreEqual || !passwordAreEqual))) {
+            Alert.alert('Hops!', 'Lütfen girdiğiniz değerleri kontrol ediniz!');
+            setCredentialsInValid({
                 email: !emailIsValid,
-                confirmEmail: !emailIsValid || !emailsAreEquil,
+                confirmEmail: !emailIsValid || !emailsAreEqual,
                 password: !passwordIsValid,
-                confirmPassword: !passwordIsValid || !passwordAreEquil
+                confirmPassword: !passwordIsValid || !passwordAreEqual,
             })
             return;
         }
-
+        onAuthenticate({ email, password })
     }
 
     function switchScreen() {
         if (isLogin) {
             navigation.navigate('Signup')
-        } else {
+        }
+        else {
             navigation.navigate('Login')
         }
     }
-
     return (
         <View style={styles.container}>
-            <AuthForm credentialsInValid={credentialsInValid} isLogin={isLogin} onSubmit={submitHandler} />
+            <AuthForm credentialsInValid={credentialsInValid} isLogin={isLogin} onsubmit={submitHandler} />
             <View>
                 <ButtonWhite onPress={switchScreen}>
-                    {isLogin ? 'Yeni Kullanıcı Oluştur' : 'Giriş Yap'}
+                    {isLogin ? 'Yeni Kullanıcı Oluştur ' : 'Giriş'}
                 </ButtonWhite>
             </View>
         </View>
@@ -71,6 +70,6 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         shadowOffset: { width: 1, height: 2 },
         shadowOpacity: 0.5,
-        shadowRadius: 100000,
+        shadowRadius: 4,
     },
 })
