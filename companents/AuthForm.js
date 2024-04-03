@@ -10,8 +10,6 @@ export default function AuthForm({ isLogin, onsubmit, credentialsInValid }) {
     const [enteredConfirmEmail, setEnteredConfirmEmail] = useState('')
     const [enteredConfirmPassword, setEnteredConfirmPassword] = useState('')
 
-
-
     const {
         email: emailIsInvalid,
         confirmEmail: emailsDontMach,

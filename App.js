@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './screens/LoginScreen';
@@ -6,70 +6,79 @@ import SignupScreen from './screens/SignupScreen';
 import AuthContextProvider, { AuthContext } from './store/auth-context';
 import { useContext } from 'react';
 import HomeScreen from './screens/HomeScreen';
+import { Ionicons } from '@expo/vector-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 function NormalStack() {
   return (
-    < Stack.Navigator screenOptions={{
+    <Stack.Navigator screenOptions={{
       headerStyle: {
         backgroundColor: '#2516FA',
       },
       headerTintColor: '#fff',
       contentStyle: {
-        backgroundColor: '#fff'
-      }
-    }} >
-
+        backgroundColor: '#fff',
+      },
+    }}>
       <Stack.Screen
         name="Login"
         component={LoginScreen}
         options={{
-          headerTitle: 'Kullanıcı Giriş'
+          headerTitle: 'Kullanıcı Giriş',
         }}
       />
       <Stack.Screen
         name="Signup"
         component={SignupScreen}
         options={{
-          headerTitle: 'Kullanıcı Kayıt'
+          headerTitle: 'Kullanıcı Kayıt',
         }}
       />
-    </Stack.Navigator >
-  )
+    </Stack.Navigator>
+  );
 }
 
 function AfterAuthenticatedStack() {
+  const authContext = useContext(AuthContext);
   return (
-    < Stack.Navigator screenOptions={{
+    <Stack.Navigator screenOptions={{
       headerStyle: {
         backgroundColor: '#2516FA',
       },
       headerTintColor: '#fff',
       contentStyle: {
-        backgroundColor: '#fff'
-      }
-    }} >
-
+        backgroundColor: '#fff',
+      },
+    }}>
       <Stack.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeScreen} // Use HomeScreen directly
         options={{
-          headerTitle: 'Anasayfa'
+          headerRight: ({ tintColor }) => (
+            <Pressable
+              style={({ pressed }) => pressed && styles.pressed}
+              onPress={authContext.logout}
+            >
+              <Ionicons name="exit" size={24} color={tintColor} />
+            </Pressable>
+          ),
         }}
       />
-    </Stack.Navigator >
-  )
+    </Stack.Navigator>
+  );
 }
 
 function Navigation() {
-  const authContext = useContext(AuthContext)
-  return ( //eğer giriş yapıldıysa buraya yönlendir AfterAuthenticatedStack(HomeScreen)
+  const authContext = useContext(AuthContext);
+  return (
     <NavigationContainer>
-      {!authContext.isAuthenticated && <NormalStack />}
-      {authContext.isAuthenticated && <AfterAuthenticatedStack />}
+      {!authContext.isAuthenticated ? <NormalStack/>: <AfterAuthenticatedStack/> }
     </NavigationContainer>
-  )
+  );
 }
 
 export default App = () => {
@@ -85,6 +94,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderBlockColor: '#fff'
-  }
+    borderBlockColor: '#fff',
+  },
+  pressed: {
+    opacity: 0.5,
+  },
 });

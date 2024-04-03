@@ -9,7 +9,7 @@ export default function LoginScreen() {
 
   const [isAuthanticated, setIsAuthanticated] = useState(false);
   const authContext = useContext(AuthContext);
-
+  
   async function loginHandler({ email, password }) {
     setIsAuthanticated(true);
     try {
@@ -18,15 +18,12 @@ export default function LoginScreen() {
     } catch (error) {
       Alert.alert('Giriş Yapılamadı!', 'Lütfen bilgilerinizi kontrol edin')
     }
-
     setIsAuthanticated(false);
   }
-
   if (isAuthanticated) {
     return <Loading message={"Giriş Yapılıyor..."}
     />;
   }
-
   return <AuthContent isLogin onAuthenticate={loginHandler} />
 }
 
