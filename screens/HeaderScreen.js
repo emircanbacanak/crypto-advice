@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native'
+import { StyleSheet, View, Pressable } from 'react-native'
 import React, { useContext } from 'react'
 import { AuthContext } from '../store/auth-context';
 import { Ionicons } from '@expo/vector-icons';

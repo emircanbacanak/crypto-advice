@@ -1,15 +1,19 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-
-
+import FooterScreen from './FooterScreen';
+import HeaderScreen from './HeaderScreen'
 
 export default function HomeScreen() {
   return (
-
-    <View style={styles.body}>
-      <Text>HomeScreen</Text>
-    </View>
-
+    <><View>
+      <HeaderScreen />
+      </View>
+      <View style={styles.body}>
+        <Text>HomeScreen</Text>
+      </View>
+      <View>
+        <FooterScreen />
+      </View></>
   );
 }
 
@@ -19,9 +23,6 @@ const styles = StyleSheet.create({
     alignContent: 'flex-start',
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
-    backgroundColor: '#ff0',
+    backgroundColor: '#660099',
   },
-  body2: {
-    backgroundColor: '#00f'
-  }
 });

@@ -8,79 +8,87 @@ import { useContext } from 'react';
 import HomeScreen from './screens/HomeScreen';
 import FooterScreen from './screens/FooterScreen';
 import HeaderScreen from './screens/HeaderScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import Arbitraj from './screens/Arbitraj'
 
 const Stack = createNativeStackNavigator();
 
-function NormalStack() {
-  return (
-    <Stack.Navigator screenOptions={{
-      headerStyle: {
-        backgroundColor: '#2516FA',
-      },
-      headerTintColor: '#fff',
-      contentStyle: {
-        backgroundColor: '#fff',
-      },
-    }}>
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{
-          headerodyTitle: 'Kullanıcı Giriş',
-        }}
-      />
-      <Stack.Screen
-        name="Signup"
-        component={SignupScreen}
-        options={{
-          headerTitle: 'Kullanıcı Kayıt',
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-function AfterAuthenticatedStack() {
-  return (
-      <View style={styles.ana}>
-        <HeaderScreen/>
-        <Body />
-        <Footer />
-      </View>
-  );
-}
-
-
-
 function Navigation() {
   const authContext = useContext(AuthContext);
-  return (
-    <NavigationContainer>
-      {!authContext.isAuthenticated ? <NormalStack /> : <AfterAuthenticatedStack />}
-    </NavigationContainer>
-  );
-}
-function Body() {
-  return (
-    <View>
-      <HomeScreen />
-    </View>
+  if (!authContext.isAuthenticated) {
+    return (
+      <Stack.Navigator screenOptions={{
+        headerStyle: {
+          backgroundColor: '#2516FA',
+        },
+        headerTintColor: '#fff',
+        contentStyle: {
+          backgroundColor: '#fff',
+        },
+      }}>
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            headerodyTitle: 'Kullanıcı Giriş',
+          }}
+        />
+        <Stack.Screen
+          name="Signup"
+          component={SignupScreen}
+          options={{
+            headerTitle: 'Kullanıcı Kayıt',
+          }}
+        />
+      </Stack.Navigator>
+    )
+  }
+  else {
+    return (
+        <View style={styles.ana}>
+          <Stack.Navigator screenOptions={{
+            headerStyle: {
+              backgroundColor: '#2516FA',
+            },
+            headerTintColor: '#fff',
+            contentStyle: {
+              backgroundColor: '#fff',
+            },
+            
+          }}>
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{ headerShown: false }} />
 
-  );
-}
-function Footer() {
-  return (
-    <View>
-      <FooterScreen />
-    </View>
+            <Stack.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={{ headerShown: false }}  />
 
-  );
+            <Stack.Screen
+              name="Arbitraj"
+              component={Arbitraj}
+              options={{ headerShown: false }} />
+              
+          </Stack.Navigator>
+
+          <View>
+            <FooterScreen />
+          </View>
+
+        </View>
+    )
+  }
+
 }
 
 export default App = () => {
   return (
     <AuthContextProvider>
-      <Navigation />
+      <NavigationContainer>
+        <Navigation />
+      </NavigationContainer>
     </AuthContextProvider>
   );
 };
@@ -89,7 +97,7 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.5,
   },
-  ana:{
-    height:'120%'
+  ana: {
+    height: '120%'
   }
 });

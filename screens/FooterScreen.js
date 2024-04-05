@@ -1,25 +1,34 @@
 import { StyleSheet, Pressable, View } from 'react-native'
 import React from 'react'
 import { Entypo, FontAwesome } from '@expo/vector-icons';
+import { AuthContext } from '../store/auth-context';
+import { useNavigation } from "@react-navigation/native";
+
 
 export default function FooterScreen() {
+    const navigation = useNavigation();
     return (
         <View style={styles.str}>
             <View style={styles.buttonContainer}>
-                <Pressable style={({ pressed }) => pressed && styles.pressed}>
-                    <Entypo name="home" style={styles.icon} size={40} color={'#fff'} />
+                <Pressable
+                    style={({ pressed }) => pressed && styles.pressed}
+                    onPress={() => navigation.navigate('Home')}>
+                    <Entypo name="home" style={styles.icon} size={37} color={'#fff'} />
                 </Pressable>
 
-                <Pressable style={({ pressed }) => pressed && styles.pressed}>
-                    <FontAwesome name="signal" size={40} color="#fff" />
+                <Pressable
+                    style={({ pressed }) => pressed && styles.pressed} 
+                    onPress={() => navigation.navigate('Arbitraj')}>
+                    <FontAwesome name="signal" size={37} color="#fff" />
                 </Pressable>
 
-                <Pressable style={({ pressed }) => pressed && styles.pressed}>
-                    <FontAwesome name="user" style={styles.icon} size={40} color="#fff" />
+                <Pressable
+                    style={({ pressed }) => pressed && styles.pressed}
+                    onPress={() => navigation.navigate('Settings')}>
+                    <FontAwesome name="user" style={styles.icon} size={37} color="#fff" />
                 </Pressable>
             </View>
         </View>
-
     )
 }
 
@@ -33,10 +42,11 @@ const styles = StyleSheet.create({
         height: 80,
         justifyContent: 'center',
         alignItems: 'stretch',
-        backgroundColor: '#000'
+        backgroundColor: '#000',
+
     },
-    pressed:{
-        opacity:0.5,
-    }
+    pressed: {
+        opacity: 0.5,
+    },
 })
 
