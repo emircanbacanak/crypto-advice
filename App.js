@@ -12,9 +12,7 @@ import HeaderScreen from './screens/HeaderScreen';
 const Stack = createNativeStackNavigator();
 
 function NormalStack() {
-  
   return (
-    
     <Stack.Navigator screenOptions={{
       headerStyle: {
         backgroundColor: '#2516FA',

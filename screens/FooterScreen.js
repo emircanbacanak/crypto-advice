@@ -1,21 +1,20 @@
 import { StyleSheet, Pressable, View } from 'react-native'
 import React from 'react'
 import { Entypo, FontAwesome } from '@expo/vector-icons';
-import { NavigationContainer } from '@react-navigation/native';
 
 export default function FooterScreen() {
     return (
         <View style={styles.str}>
             <View style={styles.buttonContainer}>
-                <Pressable>
+                <Pressable style={({ pressed }) => pressed && styles.pressed}>
                     <Entypo name="home" style={styles.icon} size={40} color={'#fff'} />
                 </Pressable>
 
-                <Pressable>
+                <Pressable style={({ pressed }) => pressed && styles.pressed}>
                     <FontAwesome name="signal" size={40} color="#fff" />
                 </Pressable>
 
-                <Pressable>
+                <Pressable style={({ pressed }) => pressed && styles.pressed}>
                     <FontAwesome name="user" style={styles.icon} size={40} color="#fff" />
                 </Pressable>
             </View>
@@ -34,8 +33,10 @@ const styles = StyleSheet.create({
         height: 80,
         justifyContent: 'center',
         alignItems: 'stretch',
-        backgroundColor: '#000',
-
+        backgroundColor: '#000'
+    },
+    pressed:{
+        opacity:0.5,
     }
 })
 
