@@ -109,10 +109,6 @@ const styles = StyleSheet.create({
         paddingBottom:10,
         fontWeight:'bold',
     },
-    texta: {
-        color: '#fff',
-        textAlign: 'center',
-        fontSize: 16,
         
     },
     textc: {
