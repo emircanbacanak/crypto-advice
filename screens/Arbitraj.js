@@ -8,12 +8,12 @@ export default function Arbitraj() {
         <><View>
             <HeaderScreen />
         </View>
-        <View style={styles.container}>
-            <Text>Arbitraj Screen</Text>
-        </View>
-        <View>
-            <FooterScreen />
-        </View></>
+            <View style={styles.container}>
+                <Text>Arbitraj Screen</Text>
+            </View>
+            <View>
+                <FooterScreen />
+            </View></>
     )
 }
 

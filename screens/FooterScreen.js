@@ -4,7 +4,6 @@ import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { AuthContext } from '../store/auth-context';
 import { useNavigation } from "@react-navigation/native";
 
-
 export default function FooterScreen() {
     const navigation = useNavigation();
     return (
@@ -17,7 +16,7 @@ export default function FooterScreen() {
                 </Pressable>
 
                 <Pressable
-                    style={({ pressed }) => pressed && styles.pressed} 
+                    style={({ pressed }) => pressed && styles.pressed}
                     onPress={() => navigation.navigate('Arbitraj')}>
                     <FontAwesome name="signal" size={37} color="#fff" />
                 </Pressable>
@@ -43,7 +42,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'stretch',
         backgroundColor: '#000',
-
     },
     pressed: {
         opacity: 0.5,

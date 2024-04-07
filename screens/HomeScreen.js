@@ -1,12 +1,10 @@
-import { ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import FooterScreen from './FooterScreen';
 import HeaderScreen from './HeaderScreen'
 
 export default function HomeScreen() {
   return (
-
-
     <><View>
       <HeaderScreen />
     </View>
@@ -15,9 +13,6 @@ export default function HomeScreen() {
       </View><View>
         <FooterScreen />
       </View></>
-
-
-
   );
 }
 

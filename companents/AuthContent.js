@@ -50,21 +50,39 @@ export default function AuthContent({ isLogin, onAuthenticate }) {
     }
     return (
         <ImageBackground source={{ uri: 'https://i.hizliresim.com/7g68l5i.jpg' }} style={{ height: '100%' }} >
-            <View style={styles.container}>
+            <View style={isLogin ? styles.containerg : styles.containerk}>
+
                 <AuthForm credentialsInValid={credentialsInValid} isLogin={isLogin} onsubmit={submitHandler} />
+
                 <View>
+                    {isLogin ? <Text style={styles.texta}>Hesabın yok mu ? </Text> : <Text style={styles.texta}>Hesabın var mı ? </Text>}
                     <ButtonWhite onPress={switchScreen}>
-                        {isLogin ? 'Yeni Kullanıcı Oluştur ' : 'Giriş'}
+                        {isLogin ? <Text style={styles.textu}>Buradan kayıt olabilirsin</Text> : <Text style={styles.textu}>Buradan giriş yapabilirsin</Text>}
                     </ButtonWhite>
                 </View>
+
             </View>
         </ImageBackground>
     )
 }
 const styles = StyleSheet.create({
-    container: {
-        marginTop: '40%',
+    containerg: {
+        marginTop: '50%',
         marginHorizontal: 30,
         padding: 10,
+    },
+    containerk: {
+        marginTop: '13%',
+        marginHorizontal: 30,
+        padding: 10,
+    },
+    textu: {
+        textDecorationLine: 'underline'
+    },
+    texta: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 16,
+        paddingTop: 15,
     },
 })

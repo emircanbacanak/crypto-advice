@@ -14,8 +14,6 @@ export default function AfterScreen() {
         <Ionicons name="exit" size={30} color={'#fff'} />
       </Pressable>
     </View>
-
-
   );
 }
 

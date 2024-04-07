@@ -5,12 +5,10 @@ import Loading from '../companents/Loading'
 import { login } from '../util/auth'
 import { AuthContext } from '../store/auth-context'
 
-
 export default function LoginScreen() {
-
   const [isAuthanticated, setIsAuthanticated] = useState(false);
   const authContext = useContext(AuthContext);
-  
+
   async function loginHandler({ email, password }) {
     setIsAuthanticated(true);
     try {

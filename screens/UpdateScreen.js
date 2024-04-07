@@ -5,11 +5,11 @@ import { StyleSheet, Alert } from 'react-native'
 import Loading from '../companents/Loading'
 import { AuthContext } from '../store/auth-context'
 
-export default function SignupScreen() {
+export default function UpdateScreen() {
   const [isAuthanticated, setIsAuthanticated] = useState(false);
   const authContext = useContext(AuthContext);
-  async function signUpHandler({ email, password }) {
 
+  async function signUpHandler({ email, password }) {
     setIsAuthanticated(true);
     try {
       const token = await createUser(email, password);
@@ -17,9 +17,9 @@ export default function SignupScreen() {
     } catch (error) {
       Alert.alert('Kayıt Olunamadı!', 'Lütfen bilgilerinizi kontrol edin')
     }
-
     setIsAuthanticated(false);
   }
+  
   if (isAuthanticated) {
     return <Loading message={"Kullanıcı Oluşturuluyor..."} />
   }

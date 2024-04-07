@@ -44,36 +44,31 @@ export default function AuthForm({ isLogin, onsubmit, credentialsInValid }) {
     }
 
     return (
-            
+
         <View>
-            {!isLogin && (
-                <><Text style={styles.textb}>YENİ HESAP OLUŞTUR</Text><View style={styles.textc}>
-                    <Text style={styles.texta}>Hesabın var mı ? <Text>Buradan giriş yapabilirsin</Text></Text>
-                </View></>
-            )
-            }
-            {isLogin && (
-                <><Text style={styles.textb}>Giriş</Text><View style={styles.textc}>
-                    <Text style={styles.texta}>Hesabın yok mu ? <Text>Buradan kayıt olabilirsin</Text></Text>
-                </View></>
-            )
+            {isLogin ?
+                <Text style={styles.textb}>Giriş</Text>
+                :
+                <Text style={styles.textb}>YENİ HESAP OLUŞTUR</Text>
             }
 
             <Input
-                label="Email"
+                label="E-mail"
                 keyboardType="email-address"
                 onUpdateValue={updateInput.bind(this, 'email')}
                 value={enteredEmail}
                 isInvalid={emailIsInvalid}
             />
+
             {!isLogin && (
                 <Input
-                    label="Email Doğrula"
+                    label="E-mail Doğrula"
                     keyboardType="email-address"
                     onUpdateValue={updateInput.bind(this, 'confirmEmail')}
                     value={enteredConfirmEmail}
                     isInvalid={emailsDontMach}
                 />)}
+
             <Input
                 label="Şifre"
                 secure
@@ -81,6 +76,7 @@ export default function AuthForm({ isLogin, onsubmit, credentialsInValid }) {
                 value={enteredPassword}
                 isInvalid={passwordIsInvalid}
             />
+
             {!isLogin && (
                 <Input
                     label="Şifreyi Doğrula"
@@ -89,11 +85,13 @@ export default function AuthForm({ isLogin, onsubmit, credentialsInValid }) {
                     value={enteredConfirmPassword}
                     isInvalid={passwordDontMach}
                 />)}
+
             <View style={styles.buttons}>
                 <Button onPress={submitHandler} >
                     {isLogin ? 'Giriş Yap' : 'Kaydol '}
                 </Button>
             </View>
+
         </View>
     )
 }
@@ -106,14 +104,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 40,
         textAlign: 'center',
-        paddingBottom:10,
-        fontWeight:'bold',
-    },
-        
-    },
-    textc: {
-        paddingLeft: '15%',
-        width: '90%',
-        paddingBottom: '10%'
+        paddingBottom: 10,
+        fontWeight: 'bold',
     },
 })
