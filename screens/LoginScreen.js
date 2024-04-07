@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, Alert } from 'react-native'
+import { StyleSheet, Alert } from 'react-native'
 import React, { useState, useContext } from 'react'
 import AuthContent from '../companents/AuthContent'
 import Loading from '../companents/Loading'
 import { login } from '../util/auth'
 import { AuthContext } from '../store/auth-context'
+
 
 export default function LoginScreen() {
 

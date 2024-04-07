@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Alert } from 'react-native'
+import { StyleSheet, Text, View, Alert, ImageBackground } from 'react-native'
 import React, { useState } from 'react'
 import AuthForm from './AuthForm'
 import ButtonWhite from './ButtonWhite'
@@ -49,27 +49,22 @@ export default function AuthContent({ isLogin, onAuthenticate }) {
         }
     }
     return (
-        <View style={styles.container}>
-            <AuthForm credentialsInValid={credentialsInValid} isLogin={isLogin} onsubmit={submitHandler} />
-            <View>
-                <ButtonWhite onPress={switchScreen}>
-                    {isLogin ? 'Yeni Kullanıcı Oluştur ' : 'Giriş'}
-                </ButtonWhite>
+        <ImageBackground source={{ uri: 'https://i.hizliresim.com/7g68l5i.jpg' }} style={{ height: '100%' }} >
+            <View style={styles.container}>
+                <AuthForm credentialsInValid={credentialsInValid} isLogin={isLogin} onsubmit={submitHandler} />
+                <View>
+                    <ButtonWhite onPress={switchScreen}>
+                        {isLogin ? 'Yeni Kullanıcı Oluştur ' : 'Giriş'}
+                    </ButtonWhite>
+                </View>
             </View>
-        </View>
+        </ImageBackground>
     )
 }
 const styles = StyleSheet.create({
     container: {
-        marginTop: 50,
-        backgroundColor: '#2516fA',
+        marginTop: '40%',
         marginHorizontal: 30,
         padding: 10,
-        borderRadius: 15,
-        elevation: 4,
-        shadowColor: 'black',
-        shadowOffset: { width: 1, height: 2 },
-        shadowOpacity: 0.5,
-        shadowRadius: 4,
     },
 })

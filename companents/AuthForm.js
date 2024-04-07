@@ -44,7 +44,21 @@ export default function AuthForm({ isLogin, onsubmit, credentialsInValid }) {
     }
 
     return (
+            
         <View>
+            {!isLogin && (
+                <><Text style={styles.textb}>YENİ HESAP OLUŞTUR</Text><View style={styles.textc}>
+                    <Text style={styles.texta}>Hesabın var mı ? <Text>Buradan giriş yapabilirsin</Text></Text>
+                </View></>
+            )
+            }
+            {isLogin && (
+                <><Text style={styles.textb}>Giriş</Text><View style={styles.textc}>
+                    <Text style={styles.texta}>Hesabın yok mu ? <Text>Buradan kayıt olabilirsin</Text></Text>
+                </View></>
+            )
+            }
+
             <Input
                 label="Email"
                 keyboardType="email-address"
@@ -87,5 +101,23 @@ export default function AuthForm({ isLogin, onsubmit, credentialsInValid }) {
 const styles = StyleSheet.create({
     buttons: {
         marginTop: 10,
-    }
+    },
+    textb: {
+        color: '#fff',
+        fontSize: 40,
+        textAlign: 'center',
+        paddingBottom:10,
+        fontWeight:'bold',
+    },
+    texta: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 16,
+        
+    },
+    textc: {
+        paddingLeft: '15%',
+        width: '90%',
+        paddingBottom: '10%'
+    },
 })
