@@ -81,7 +81,6 @@ function Navigation() {
         </View>
     )
   }
-
 }
 
 export default App = () => {

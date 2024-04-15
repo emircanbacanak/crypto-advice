@@ -25,7 +25,4 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         backgroundColor: '#f00',
     },
-    pressed: {
-        opacity: 0.5,
-    },
 })
