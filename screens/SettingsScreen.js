@@ -1,28 +1,43 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, TextInput, View } from 'react-native'
 import React from 'react'
 import FooterScreen from './FooterScreen'
-import HeaderScreen from './HeaderScreen'
+
 
 export default function SettingsScreen() {
   return (
-    <><View>
-      <HeaderScreen />
-    </View>
-      <View style={styles.container}>
-        <Text>Settings Screen</Text>
+    <>
+      <View style={styles.inputContainer}>
+
+        <TextInput
+          style={[styles.input ,{margin:40, }] }
+          autoCapitalize='none' />
+
+        <TextInput
+          style={[styles.input ,{marginLeft:40, }]}
+          autoCapitalize='none' />
+
       </View>
+
       <View>
         <FooterScreen />
-      </View></>
+      </View>
+    </>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  inputContainer: {
     height: 700,
-    alignContent: 'flex-start',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-end',
+    width:'100%',
     backgroundColor: '#30D5C8',
-  }
+  },
+  input: {
+    marginBottom: '20%',
+    backgroundColor: '#FDFFE4',
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+    fontSize: 16,
+    width: '80%',
+  },
 })

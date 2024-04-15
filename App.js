@@ -6,7 +6,7 @@ import SignupScreen from './screens/SignupScreen';
 import AuthContextProvider, { AuthContext } from './store/auth-context';
 import { useContext } from 'react';
 import HomeScreen from './screens/HomeScreen';
-import FooterScreen from './screens/FooterScreen';
+import HeaderScreen from './screens/HeaderScreen'
 import SettingsScreen from './screens/SettingsScreen';
 import Arbitraj from './screens/Arbitraj'
 
@@ -30,7 +30,7 @@ function Navigation() {
           component={LoginScreen}
           options={{
             headerodyTitle: 'Kullanıcı Giriş',
-            headerShown: false ,
+            headerShown: false,
           }}
         />
         <Stack.Screen
@@ -38,7 +38,7 @@ function Navigation() {
           component={SignupScreen}
           options={{
             headerTitle: 'Kullanıcı Kayıt',
-            headerShown: false ,
+            headerShown: false,
           }}
         />
       </Stack.Navigator>
@@ -46,6 +46,12 @@ function Navigation() {
   }
   else {
     return (
+
+      <>
+        <View>
+          <HeaderScreen />
+        </View>
+
         <View style={styles.ana}>
           <Stack.Navigator screenOptions={{
             headerStyle: {
@@ -55,30 +61,28 @@ function Navigation() {
             contentStyle: {
               backgroundColor: '#fff',
             },
-            
           }}>
             <Stack.Screen
               name="Home"
               component={HomeScreen}
-              options={{ headerShown: false ,  headerodyTitle: 'Kullanıcı Giriş', }} />
+              options={{ headerShown: false, headerodyTitle: 'Kullanıcı Giriş', }} />
 
             <Stack.Screen
               name="Settings"
               component={SettingsScreen}
-              options={{ headerShown: false }}  />
+              options={{ headerShown: false }} />
 
             <Stack.Screen
               name="Arbitraj"
               component={Arbitraj}
               options={{ headerShown: false }} />
-              
+
           </Stack.Navigator>
 
-          <View>
-            <FooterScreen />
-          </View>
-
         </View>
+
+
+      </>
     )
   }
 }

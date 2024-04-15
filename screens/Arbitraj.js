@@ -1,28 +1,68 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import FooterScreen from './FooterScreen'
-import HeaderScreen from './HeaderScreen'
+import React from 'react';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import FooterScreen from './FooterScreen';
+import { useBinanceData } from '../companents/BinanceData';
 
-export default function Arbitraj() {
-    return (
-        <><View>
-            <HeaderScreen />
-        </View>
-            <View style={styles.container}>
-                <Text>Arbitraj Screen</Text>
-            </View>
-            <View>
-                <FooterScreen />
-            </View></>
-    )
-}
+const Arbitraj = () => {
+  const data = useBinanceData();
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let intervalId;
+
+      if (data.length > 0) {
+        intervalId = setInterval(() => useBinanceData(), 20000);
+      }
+
+      return () => clearInterval(intervalId);
+    }, [data])
+  );
+
+  return (
+    <>
+      <View>
+        <SafeAreaView style={styles.container}>
+          <ScrollView contentContainerStyle={styles.sc}>
+            {data.map((item, index) => (
+              <View key={index} style={styles.card}>
+                <Text style={styles.text}>{item.symbol}: ${item.price}</Text>
+              </View>
+            ))}
+          </ScrollView>
+        </SafeAreaView>
+      </View>
+
+      <View>
+        <FooterScreen />
+      </View>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        height: 700,
-        alignContent: 'flex-start',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-end',
-        backgroundColor: '#f00',
-    },
-})
+  container: {
+    height: 700,
+    backgroundColor: '#000000',
+    width: '100%',
+  },
+  sc: {
+    alignItems: 'center',
+  },
+  card: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,
+    marginBottom: 10,
+    padding: 10,
+    backgroundColor: '#C7C7C7',
+    borderRadius: 10,
+    width: '85%',
+    height: 70,
+  },
+  text: {
+    fontSize: 18,
+  },
+});
+
+export default Arbitraj;
