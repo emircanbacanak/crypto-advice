@@ -6,9 +6,10 @@ import SignupScreen from './screens/SignupScreen';
 import AuthContextProvider, { AuthContext } from './store/auth-context';
 import { useContext } from 'react';
 import HomeScreen from './screens/HomeScreen';
-import HeaderScreen from './screens/HeaderScreen'
 import SettingsScreen from './screens/SettingsScreen';
-import Arbitraj from './screens/Arbitraj'
+import Arbitraj from './screens/Arbitraj';
+import ForgetPassword from './screens/forgetPassword';
+import FooterScreen from './screens/FooterScreen'; // Yeni eklenen dosya
 
 const Stack = createNativeStackNavigator();
 
@@ -16,20 +17,30 @@ function Navigation() {
   const authContext = useContext(AuthContext);
   if (!authContext.isAuthenticated) {
     return (
-      <Stack.Navigator screenOptions={{
-        headerStyle: {
-          backgroundColor: '#000',
-        },
-        headerTintColor: '#fff',
-        contentStyle: {
-          backgroundColor: '#fff',
-        },
-      }}>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#000000',
+          },
+          headerTintColor: '#ffffff',
+          contentContainerStyle: { // Değişiklik burada
+            backgroundColor: '#ffffff',
+          },
+          animation: 'slide_from_right',
+        }}>
         <Stack.Screen
           name="Login"
           component={LoginScreen}
           options={{
-            headerodyTitle: 'Kullanıcı Giriş',
+            headerTitle: 'Kullanıcı Giriş', // Değişiklik burada
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Forget"
+          component={ForgetPassword} // Değişiklik burada
+          options={{
+            headerTitle: 'Şifremi unuttum', // Değişiklik burada
             headerShown: false,
           }}
         />
@@ -37,71 +48,68 @@ function Navigation() {
           name="Signup"
           component={SignupScreen}
           options={{
-            headerTitle: 'Kullanıcı Kayıt',
+            headerTitle: 'Kullanıcı Kayıt', // Değişiklik burada
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="Footer" // Yeni eklenen dosya burada
+          component={FooterScreen} // Yeni eklenen dosya burada
+          options={{ headerShown: false }} // Yeni eklenen dosya burada
+        />
       </Stack.Navigator>
-    )
-  }
-  else {
+    );
+  } else {
     return (
-
       <>
-        <View>
-          <HeaderScreen />
-        </View>
-
-        <View style={styles.ana}>
-          <Stack.Navigator screenOptions={{
-            headerStyle: {
-              backgroundColor: '#2516FA',
-            },
-            headerTintColor: '#fff',
-            contentStyle: {
-              backgroundColor: '#fff',
-            },
-          }}>
-            <Stack.Screen
-              name="Home"
-              component={HomeScreen}
-              options={{ headerShown: false, headerodyTitle: 'Kullanıcı Giriş', }} />
-
-            <Stack.Screen
-              name="Settings"
-              component={SettingsScreen}
-              options={{ headerShown: false }} />
-
-            <Stack.Screen
-              name="Arbitraj"
-              component={Arbitraj}
-              options={{ headerShown: false }} />
-
-          </Stack.Navigator>
-
-        </View>
-
-
+          <View style={styles.ana}>
+            <Stack.Navigator
+              screenOptions={{
+                headerStyle: {
+                  backgroundColor: '#2516FA',
+                },
+                headerTintColor: '#ffffff',
+                contentContainerStyle: { // Değişiklik burada
+                  backgroundColor: '#ffffff',
+                },
+                animation: 'slide_from_right',
+              }}>
+              <Stack.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{ headerShown: false, headerTitle: 'Kullanıcı Giriş' }} />
+              <Stack.Screen
+                name="Settings"
+                component={SettingsScreen}
+                options={{ headerShown: false }} />
+              <Stack.Screen
+                name="Arbitraj"
+                component={Arbitraj}
+                options={{ headerShown: false }} />
+            </Stack.Navigator>
+          </View>
       </>
-    )
+    );
   }
 }
 
-export default App = () => {
+const App = () => { // Değişiklik burada
   return (
-    <AuthContextProvider>
-      <NavigationContainer>
+    <NavigationContainer>
+      <AuthContextProvider>
         <Navigation />
-      </NavigationContainer>
-    </AuthContextProvider>
+      </AuthContextProvider>
+    </NavigationContainer>
   );
 };
+
+export default App;
 
 const styles = StyleSheet.create({
   pressed: {
     opacity: 0.5,
   },
   ana: {
-    height: '120%'
-  }
+    height: '100%',
+  },
 });

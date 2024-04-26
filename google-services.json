@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "394887415683",
+    "project_id": "arbitraj-e8464",
+    "storage_bucket": "arbitraj-e8464.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394887415683:android:f06a02302df6882537d8b6",
+        "android_client_info": {
+          "package_name": "com.arbitraj"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClfEjw5uVSVyAI6B7Jit6GexlMUx9OtqA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

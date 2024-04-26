@@ -27,7 +27,7 @@ export default function SettingsScreen() {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    height: 700,
+    height: '94%',
     width:'100%',
     backgroundColor: '#30D5C8',
   },

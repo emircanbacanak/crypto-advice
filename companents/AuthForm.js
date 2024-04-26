@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View , StatusBar  } from 'react-native'
 import React, { useState } from 'react'
 import Input from './Input'
 import Button from './Button'
@@ -46,6 +46,7 @@ export default function AuthForm({ isLogin, onsubmit, credentialsInValid }) {
     return (
 
         <View>
+            <StatusBar hidden={true} />
             {isLogin ?
                 <Text style={styles.textb}>Giriş</Text>
                 :
@@ -101,8 +102,8 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     textb: {
-        color: '#fff',
-        fontSize: 40,
+        color: '#ffffff',
+        fontSize: 35,
         textAlign: 'center',
         paddingBottom: 10,
         fontWeight: 'bold',

@@ -21,8 +21,8 @@ const Arbitraj = () => {
 
   return (
     <>
-      <View>
-        <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <SafeAreaView >
           <ScrollView contentContainerStyle={styles.sc}>
             {data.map((item, index) => (
               <View key={index} style={styles.card}>
@@ -42,7 +42,7 @@ const Arbitraj = () => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 700,
+    height: '94%',
     backgroundColor: '#000000',
     width: '100%',
   },

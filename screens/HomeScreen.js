@@ -55,7 +55,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   body: {
-    height: 700,
+    height: '94%',
     backgroundColor:'#000000'
   },
   loadingText: {

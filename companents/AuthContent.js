@@ -48,6 +48,10 @@ export default function AuthContent({ isLogin, onAuthenticate }) {
             navigation.navigate('Login')
         }
     }
+    
+    function forget() {
+            navigation.navigate('Forget')
+    }
     return (
         <ImageBackground source={{ uri: 'https://i.hizliresim.com/7g68l5i.jpg' }} style={{ height: '100%' }} >
             <View style={isLogin ? styles.containerg : styles.containerk}>
@@ -55,6 +59,9 @@ export default function AuthContent({ isLogin, onAuthenticate }) {
                 <AuthForm credentialsInValid={credentialsInValid} isLogin={isLogin} onsubmit={submitHandler} />
 
                 <View>
+                    <ButtonWhite onPress={forget}>
+                        {isLogin ? <Text style={styles.textu}>Şifremi unuttumn</Text>:""}
+                    </ButtonWhite>
                     {isLogin ? <Text style={styles.texta}>Hesabın yok mu ? </Text> : <Text style={styles.texta}>Hesabın var mı ? </Text>}
                     <ButtonWhite onPress={switchScreen}>
                         {isLogin ? <Text style={styles.textu}>Buradan kayıt olabilirsin</Text> : <Text style={styles.textu}>Buradan giriş yapabilirsin</Text>}
