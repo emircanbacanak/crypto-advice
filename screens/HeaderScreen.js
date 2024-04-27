@@ -12,7 +12,7 @@ export default function AfterScreen() {
         style={({ pressed }) => pressed && styles.pressed}
         onPress={authContext.logout}
       >
-        <Ionicons name="exit" size={30} color={'#ffffff'} />
+        <Ionicons name="exit" size={30} color={'#fff'} />
       </Pressable>
     </View>
   )
@@ -23,9 +23,9 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   container: {
-    height: 35,
+    height: 30,
     paddingRight: 10,
     alignItems: 'flex-end',
-    backgroundColor: '#000000',
+    backgroundColor: '#000',
   },
 })

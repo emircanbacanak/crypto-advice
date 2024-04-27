@@ -32,7 +32,7 @@
         console.error("Veri alınırken hata oluştu:", error);
         if (error.message.includes("Çok fazla istek yapıldı")) {
           // Bekle ve tekrar dene
-          return delay(40000).then(() => fetchData());
+          return delay(10000).then(() => fetchData());
         } else {
           throw error;
         }

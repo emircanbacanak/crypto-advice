@@ -1,67 +1,59 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, SafeAreaView, FlatList } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, SafeAreaView, FlatList , StatusBar} from 'react-native';
 import FooterScreen from './FooterScreen';
 import Item from "../companents/Item";
 import { fetchData } from "../companents/api";
+import SearchBar from '../companents/searchBar';
 
 export default function HomeScreen() {
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchText, setSearchText] = useState('');
 
-  useFocusEffect(
-    React.useCallback(() => {
-      let isActive = true;
+  useEffect(() => {
+    fetchDataAndUpdate();
+    const intervalId = setInterval(fetchDataAndUpdate, 20000);
 
-      const fetchDataAndUpdate = async () => {
-        try {
-          const res = await fetchData();
-          if (isActive) {
-            setData(res.data);
-          }
-        } catch (error) {
-          console.error("Veri alınırken hata oluştu:", error);
-        }
-      };
+    return () => clearInterval(intervalId);
+  }, []);
 
-      fetchDataAndUpdate();
-      const intervalId = setInterval(fetchDataAndUpdate, 20000);
+  useEffect(() => {
+    const filtered = data.filter(item =>
+      item.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilteredData(filtered);
+  }, [data, searchText]);
 
-      return () => {
-        clearInterval(intervalId);
-        isActive = false;
-      };
-    }, [])
-  );
+  const fetchDataAndUpdate = async () => {
+    try {
+      const res = await fetchData();
+      setData(res.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
-  return (  
+  return (
     <>
-     <View style={styles.body}>
+      <SearchBar searchText={searchText} setSearchText={setSearchText} />
+      <View style={styles.body}>
+      <StatusBar hidden={true} />
         <SafeAreaView>
           <FlatList
-            data={data}
-            extraData={data}
+            data={filteredData}
             renderItem={({ item }) => <Item item={item} />}
             keyExtractor={(item) => item.id.toString()}
           />
         </SafeAreaView>
       </View>
-
-      <View>
-        <FooterScreen />
-      </View>
+      <FooterScreen />
     </>
   );
 }
 
 const styles = StyleSheet.create({
   body: {
-    height: '94%',
-    backgroundColor:'#000000'
-  },
-  loadingText: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginTop: 20,
-    color: '#FFFFFF',
+    flex: 1,
+    backgroundColor: '#000000',
   },
 });
