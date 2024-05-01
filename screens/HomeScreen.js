@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, SafeAreaView, FlatList , StatusBar} from 'react-native';
+import { StyleSheet, View, SafeAreaView, FlatList, StatusBar } from 'react-native';
 import FooterScreen from './FooterScreen';
 import Item from "../companents/Item";
 import { fetchData } from "../companents/api";
@@ -34,18 +34,18 @@ export default function HomeScreen() {
   };
 
   return (
-    <>
-      <SearchBar searchText={searchText} setSearchText={setSearchText} />
+    <><>
+      <SearchBar style={styles.searchBar} searchText={searchText} setSearchText={setSearchText} />
       <View style={styles.body}>
-      <StatusBar hidden={true} />
+        <StatusBar hidden={true} />
         <SafeAreaView>
           <FlatList
             data={filteredData}
             renderItem={({ item }) => <Item item={item} />}
-            keyExtractor={(item) => item.id.toString()}
-          />
+            keyExtractor={(item) => item.id.toString()} />
         </SafeAreaView>
       </View>
+    </>
       <FooterScreen />
     </>
   );
@@ -56,4 +56,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000000',
   },
+  searchBar: {
+    height: 5,
+  }
 });

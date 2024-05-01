@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     alignSelf: 'center',
-    backgroundColor: '#979797',
+    backgroundColor: '#EFEFEF',
     width: '75%',
     padding: 20,
     margin: 10,
