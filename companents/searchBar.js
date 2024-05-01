@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     position: 'absolute',
-    paddingBottom:22,
-    paddingLeft:20,
+    paddingBottom: 22,
+    paddingLeft: 20,
   },
   icon: {
     marginRight: 10,
@@ -76,16 +76,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderBottomWidth: 1,
     borderBottomColor: '#cccccc',
-    overflow: 'hidden', 
+    overflow: 'hidden',
     alignItems: 'stretch',
   },
   input: {
     flex: 1,
     height: 35,
     paddingHorizontal: 5,
-    opacity: 0, 
+    opacity: 0,
     textAlign: 'center',
-    fontFamily: 'Roboto', 
+    fontFamily: 'Roboto',
     fontSize: 16,
   },
 });

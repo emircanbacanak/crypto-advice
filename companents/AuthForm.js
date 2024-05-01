@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View , StatusBar  } from 'react-native'
+import { StyleSheet, Text, View, StatusBar } from 'react-native'
 import React, { useState } from 'react'
 import Input from './Input'
 import Button from './Button'

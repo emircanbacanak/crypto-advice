@@ -61,34 +61,32 @@ function Navigation() {
     );
   } else {
     return (
-      <>
-          <View style={styles.ana}>
-            <Stack.Navigator
-              screenOptions={{
-                headerStyle: {
-                  backgroundColor: '#2516FA',
-                },
-                headerTintColor: '#ffffff',
-                contentContainerStyle: { // Değişiklik burada
-                  backgroundColor: '#ffffff',
-                },
-                animation: 'slide_from_right',
-              }}>
-              <Stack.Screen
-                name="Home"
-                component={HomeScreen}
-                options={{ headerShown: false, headerTitle: 'Kullanıcı Giriş' }} />
-              <Stack.Screen
-                name="Settings"
-                component={SettingsScreen}
-                options={{ headerShown: false }} />
-              <Stack.Screen
-                name="Arbitraj"
-                component={Arbitraj}
-                options={{ headerShown: false }} />
-            </Stack.Navigator>
-          </View>
-      </>
+      <View style={styles.ana}>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: '#2516FA',
+            },
+            headerTintColor: '#ffffff',
+            contentContainerStyle: { // Değişiklik burada
+              backgroundColor: '#ffffff',
+            },
+            animation: 'slide_from_right',
+          }}>
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ headerShown: false, headerTitle: 'Kullanıcı Giriş' }} />
+          <Stack.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{ headerShown: false }} />
+          <Stack.Screen
+            name="Arbitraj"
+            component={Arbitraj}
+            options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </View>
     );
   }
 }

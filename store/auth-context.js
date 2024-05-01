@@ -6,7 +6,6 @@ export const AuthContext = createContext({
     isAuthenticated: false, //Giriş bilgileri doğrumu
     authenticate: (token) => { },
     logout: () => { },
-
 })
 
 function AuthContextProvider({ children }) {

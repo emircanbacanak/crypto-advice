@@ -17,13 +17,12 @@ export default function SignupScreen() {
     } catch (error) {
       Alert.alert('Kayıt Olunamadı!', 'Lütfen bilgilerinizi kontrol edin')
     }
-
     setIsAuthanticated(false);
   }
+
   if (isAuthanticated) {
     return <Loading message={"Kullanıcı Oluşturuluyor..."} />
   }
   return <AuthContent onAuthenticate={signUpHandler} />;
 }
-
 const styles = StyleSheet.create({});

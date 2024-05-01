@@ -48,9 +48,9 @@ export default function AuthContent({ isLogin, onAuthenticate }) {
             navigation.navigate('Login')
         }
     }
-    
+
     function forget() {
-            navigation.navigate('Forget')
+        navigation.navigate('Forget')
     }
     return (
         <ImageBackground source={{ uri: 'https://i.hizliresim.com/7g68l5i.jpg' }} style={{ height: '100%' }} >
@@ -60,7 +60,7 @@ export default function AuthContent({ isLogin, onAuthenticate }) {
 
                 <View>
                     <ButtonWhite onPress={forget}>
-                        {isLogin ? <Text style={styles.textu}>Şifremi unuttumn</Text>:""}
+                        {isLogin ? <Text style={styles.textu}>Şifremi unuttumn</Text> : ""}
                     </ButtonWhite>
                     {isLogin ? <Text style={styles.texta}>Hesabın yok mu ? </Text> : <Text style={styles.texta}>Hesabın var mı ? </Text>}
                     <ButtonWhite onPress={switchScreen}>

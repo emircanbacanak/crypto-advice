@@ -9,19 +9,28 @@ const App = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
+      setMaxPriceDifference(null); // Önbelleği sil
+  
       const kucoinResponse = await fetch('https://api.kucoin.com/api/v1/market/allTickers');
       const kucoinData = await kucoinResponse.json();
       const binanceResponse = await fetch('https://api.binance.com/api/v3/ticker/price');
       const binanceData = await binanceResponse.json();
-
+  
       const filteredKucoinData = kucoinData.data.ticker.filter(item =>
         item.symbol.endsWith('USDT') &&
         !item.symbol.endsWith('UP-USDT') &&
         !item.symbol.endsWith('DOWN-USDT') &&
         !item.symbol.endsWith('BTCUP-USDT') &&
+        !item.symbol.endsWith('BULL-USDT') &&
+        !item.symbol.endsWith('BIFI-USDT') &&
+        !item.symbol.endsWith('BTT-USDT') &&
+        !item.symbol.endsWith('AI-USDT') &&
+        !item.symbol.endsWith('ACE-USDT') &&
+        !item.symbol.endsWith('MC-USDT') &&
+        !item.symbol.endsWith('ALT-USDT') &&
         !item.symbol.endsWith('HNT-USDT')
       );
-
+  
       const maxDifferencePair = findMaxPriceDifference(filteredKucoinData, binanceData);
       setMaxPriceDifference(maxDifferencePair);
       setLoading(false);
@@ -59,11 +68,13 @@ const App = () => {
   };
 
   const calculatePercentageDifference = (higherPrice, lowerPrice) => {
-    return ((higherPrice - lowerPrice) / lowerPrice) * 100;
+    const percentageDifference = ((higherPrice - lowerPrice) / lowerPrice) * 100;
+    return Math.abs(percentageDifference);
   };
+  
 
   useEffect(() => {
-    const fetchDataInterval = setInterval(fetchData, 10000);
+    const fetchDataInterval = setInterval(fetchData, 15000);
 
     fetchData();
 
@@ -104,47 +115,48 @@ const App = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000000',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#ffffff',
-  },
-  loadingText: {
-    fontSize: 18,
-    marginTop: 20,
-    color: '#ffffff',
-  },
-  noDataText: {
-    fontSize: 18,
-    marginTop: 20,
-    color: '#555',
-  },
-  card: {
-    alignItems: 'center',
-    width: '75%',
-    backgroundColor: '#EFEFEF',
-    borderRadius: 10,
-    padding: 15,
-    marginVertical: 10,
-  },
-  symbol: {
-    fontSize: 18,
-    color: '#333',
-  },
-  price: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#007bff',
-  },
-});
 
-export default App;
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#000000',
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingHorizontal: 20,
+    },
+    title: {
+      fontSize: 26,
+      fontWeight: 'bold',
+      marginBottom: 20,
+      color: '#ffffff',
+    },
+    loadingText: {
+      fontSize: 18,
+      marginTop: 20,
+      color: '#ffffff',
+    },
+    noDataText: {
+      fontSize: 18,
+      marginTop: 20,
+      color: '#555',
+    },
+    card: {
+      alignItems: 'center',
+      width: '75%',
+      backgroundColor: '#EFEFEF',
+      borderRadius: 10,
+      padding: 15,
+      marginVertical: 10,
+    },
+    symbol: {
+      fontSize: 18,
+      color: '#333',
+    },
+    price: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: '#007bff',
+    },
+  });
+
+  export default App;

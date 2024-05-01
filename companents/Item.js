@@ -30,7 +30,7 @@ const Item = ({ item }) => {
             <Foundation
               name="arrow-down"
               size={25}
-              style={{ 
+              style={{
                 color: textColor,
               }} />
             :
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   textsb: {
     fontSize: 14,
-    paddingRight:20,
+    paddingRight: 20,
   },
   symbol: {
     width: 40,

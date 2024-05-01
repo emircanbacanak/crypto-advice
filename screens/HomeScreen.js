@@ -34,7 +34,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <><>
+    <>
       <SearchBar style={styles.searchBar} searchText={searchText} setSearchText={setSearchText} />
       <View style={styles.body}>
         <StatusBar hidden={true} />
@@ -45,8 +45,9 @@ export default function HomeScreen() {
             keyExtractor={(item) => item.id.toString()} />
         </SafeAreaView>
       </View>
-    </>
-      <FooterScreen />
+      <View>
+        <FooterScreen />
+      </View>
     </>
   );
 }

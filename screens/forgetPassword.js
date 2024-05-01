@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { auth } from '../firebase'; // firebase yerine auth olarak ithal edilir
+import { auth } from '../firebase';
 
 const ForgetPassword = () => {
   const [email, setEmail] = React.useState('');
@@ -16,7 +16,6 @@ const ForgetPassword = () => {
         alert("Şifre sıfırlama e-postası gönderilirken bir hata oluştu: ");
       });
   };
-  
 
   return (
     <ImageBackground source={{ uri: 'https://i.hizliresim.com/7g68l5i.jpg' }} style={{ height: '100%' }} >
