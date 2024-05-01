@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import FooterScreen from './FooterScreen';
-import { useBinanceData } from '../companents/BinanceData';
 
 const Arbitraj = () => {
   const data = useBinanceData();
@@ -32,8 +31,6 @@ const Arbitraj = () => {
           </ScrollView>
         </SafeAreaView>
       </View>
-
-      <View>
         <FooterScreen />
       </View>
     </>
@@ -50,7 +47,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   card: {
-    justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 10,
     marginBottom: 10,
