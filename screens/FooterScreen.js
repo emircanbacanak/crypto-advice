@@ -31,6 +31,7 @@ export default function FooterScreen() {
 
 const styles = StyleSheet.create({
     buttonContainer: {
+        alignSelf:'stretch',
         height: 51,
         justifyContent: 'flex-end',
         backgroundColor: '#000000',

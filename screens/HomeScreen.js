@@ -45,7 +45,7 @@ export default function HomeScreen() {
             keyExtractor={(item) => item.id.toString()} />
         </SafeAreaView>
       </View>
-      <View>
+      <View style={styles.footer}>
         <FooterScreen />
       </View>
     </>
@@ -54,8 +54,13 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   body: {
-    flex: 1,
+    height:670,
     backgroundColor: '#000000',
+  },
+  footer:{
+    marginBottom:'0%',
+    alignItems:'flex-end',
+    justifyContent:'flex-end',
   },
   searchBar: {
     height: 5,
