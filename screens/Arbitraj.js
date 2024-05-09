@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import FooterScreen from './FooterScreen';
+import fetch from 'node-fetch';
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -11,64 +12,76 @@ const App = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      setMaxPriceDifference(null); // Clear cache
+      setMaxPriceDifference(null); // Önbelleği temizle
 
       const kucoinResponse = await fetch('https://api.kucoin.com/api/v1/market/allTickers');
       const kucoinData = await kucoinResponse.json();
+  
       const binanceResponse = await fetch('https://api.binance.com/api/v3/ticker/price');
       const binanceData = await binanceResponse.json();
 
-      const filteredKucoinData = kucoinData.data.ticker.filter(item =>
-        item.symbol.endsWith('USDT') &&
-        !item.symbol.endsWith('UP-USDT') &&
-        !item.symbol.endsWith('DOWN-USDT') &&
-        !item.symbol.endsWith('BTCUP-USDT') &&
-        !item.symbol.endsWith('BULL-USDT') &&
-        !item.symbol.endsWith('BIFI-USDT') &&
-        !item.symbol.endsWith('BTT-USDT') &&
-        !item.symbol.endsWith('AI-USDT') &&
-        !item.symbol.endsWith('ACE-USDT') &&
-        !item.symbol.endsWith('MC-USDT') &&
-        !item.symbol.endsWith('ALT-USDT') &&
-        !item.symbol.endsWith('HNT-USDT')
-      );
+      const bybitResponse = await fetch(`https://api.bybit.com/v2/public/tickers`);
+      const bybitData = await bybitResponse.json();
 
-      const maxDifferencePair = findMaxPriceDifference(filteredKucoinData, binanceData);
+      const maxDifferencePair = findMaxPriceDifference(kucoinData.data.ticker, binanceData, bybitData.result);
       setMaxPriceDifference(maxDifferencePair);
+  
       setLoading(false);
     } catch (error) {
-      console.error('Data fetching error:', error);
+      console.error('Veri çekme hatası:', error);
       setLoading(false);
     }
   };
 
-  const findMaxPriceDifference = (kucoinData, binanceData) => {
+  const findMaxPriceDifference = (kucoinData, binanceData, bybitData) => {
     let maxDifference = null;
     let maxDifferencePair = null;
 
-    kucoinData.forEach(kucoinItem => {
-      const binanceItem = binanceData.find(item => item.symbol === kucoinItem.symbol.replace('-USDT', 'USDT'));
-      if (binanceItem) {
+    const firstExchangeSymbols = kucoinData.map(item => item.symbol.replace('-USDT', ''));
+    const secondExchangeSymbols = binanceData.map(item => item.symbol.replace('USDT', ''));
+    let commonSymbols = firstExchangeSymbols.filter(symbol => secondExchangeSymbols.includes(symbol));
+  
+    let filterSymbols = ['UMA','XMR' ,'HNT','AERGO']; // İstenilmeyenler
+  
+    commonSymbols = commonSymbols.filter(symbol => !filterSymbols.includes(symbol));
+  
+    commonSymbols.forEach(symbol => {
+      const kucoinItem = kucoinData.find(item => item.symbol === symbol + '-USDT');
+      const binanceItem = binanceData.find(item => item.symbol === symbol + 'USDT');
+      const bybitItem = bybitData.find(item => item.symbol === symbol + 'USDT');
+  
+      if (kucoinItem && binanceItem && bybitItem) {
         const kucoinPrice = parseFloat(kucoinItem.last);
         const binancePrice = parseFloat(binanceItem.price);
-        const percentageDiff = calculatePercentageDifference(kucoinPrice, binancePrice);
-        if (maxDifference === null || percentageDiff > maxDifference) {
-          maxDifference = percentageDiff;
-          maxDifferencePair = {
-            symbol: kucoinItem.symbol,
-            higherPriceExchange: kucoinPrice > binancePrice ? 'Kucoin' : 'Binance',
-            higherPrice: Math.max(kucoinPrice, binancePrice),
-            lowerPriceExchange: kucoinPrice < binancePrice ? 'Kucoin' : 'Binance',
-            lowerPrice: Math.min(kucoinPrice, binancePrice),
-            percentageDifference: percentageDiff,
-          };
+        const bybitPrice = parseFloat(bybitItem.last_price);
+        const percentageDiffKB = calculatePercentageDifference(kucoinPrice, binancePrice);
+        const percentageDiffBY = calculatePercentageDifference(binancePrice, bybitPrice);
+        const percentageDiffYK = calculatePercentageDifference(bybitPrice, kucoinPrice);
+        
+        if (percentageDiffKB < 50 || percentageDiffBY < 50 || percentageDiffYK < 50) {
+          const maxDiff = Math.max(percentageDiffKB, percentageDiffBY, percentageDiffYK);
+          if (maxDiff > 50) {
+            return;
+          }
+          
+          if (maxDifference === null || maxDiff > maxDifference) {
+            maxDifference = maxDiff;
+            maxDifferencePair = {
+              symbol: symbol,
+              higherPriceExchange: kucoinPrice > binancePrice && kucoinPrice > bybitPrice ? 'Kucoin' : binancePrice > kucoinPrice && binancePrice > bybitPrice ? 'Binance' : 'Bybit',
+              higherPrice: Math.max(kucoinPrice, binancePrice, bybitPrice),
+              lowerPriceExchange: kucoinPrice < binancePrice && kucoinPrice < bybitPrice ? 'Kucoin' : binancePrice < kucoinPrice && binancePrice < bybitPrice ? 'Binance' : 'Bybit',
+              lowerPrice: Math.min(kucoinPrice, binancePrice, bybitPrice),
+              percentageDifference: maxDiff,
+            };
+          }
         }
       }
     });
-
+  
     return maxDifferencePair;
   };
-
+  
   const calculatePercentageDifference = (higherPrice, lowerPrice) => {
     const percentageDifference = ((higherPrice - lowerPrice) / lowerPrice) * 100;
     return Math.abs(percentageDifference);
@@ -79,7 +92,7 @@ const App = () => {
 
     fetchData();
 
-    return () => clearInterval(fetchDataInterval); // Cleanup
+    return () => clearInterval(fetchDataInterval);
   }, []);
 
   const handleCalculate = () => {
@@ -93,7 +106,7 @@ const App = () => {
   };
 
   return (
-    <><View style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.title}>En Yüksek Fiyat Farkı</Text>
       {loading ? (
         <Text style={styles.loadingText}>Yükleniyor...</Text>
@@ -132,24 +145,21 @@ const App = () => {
       ) : (
         <Text style={styles.noDataText}>Fiyat farkı bulunamadı</Text>
       )}
-
-    </View>
       <View style={styles.footer}>
         <FooterScreen />
       </View>
-
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height: 730,
+    flex: 1,
     backgroundColor: '#000000',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingBottom:120,
+    paddingBottom: 120,
   },
   title: {
     fontSize: 26,
@@ -214,6 +224,11 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 18,
     color: '#ffffff',
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
   },
 });
 
