@@ -12,7 +12,7 @@
     "@firebase/auth": "^1.7.2",
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-native-community/async-storage": "^1.12.1",
-    "@react-native-firebase/app": "^19.1.2",
+    "@react-native-firebase/app": "^19.2.2",
     "@react-native-firebase/auth": "^19.1.2",
     "@react-native-firebase/firestore": "^19.1.2",
     "@react-navigation/bottom-tabs": "^6.5.20",
@@ -24,12 +24,15 @@
     "ccxt": "^4.3.9",
     "expo": "^51.0.0",
     "expo-cli": "^6.3.10",
+    "expo-constants": "~16.0.1",
     "expo-file-system": "~17.0.1",
     "expo-firebase-auth": "^2.0.0",
     "expo-firebase-core": "^6.0.0",
     "expo-firebase-firestore": "^2.0.0",
     "expo-font": "~12.0.4",
     "expo-linear-gradient": "~13.0.2",
+    "expo-linking": "~6.3.1",
+    "expo-router": "~3.5.11",
     "expo-status-bar": "~1.12.1",
     "firebase": "^10.11.1",
     "npx": "^10.2.2",
@@ -46,7 +49,8 @@
     "react-native-screens": "3.31.1",
     "react-native-system-setting": "^1.7.6",
     "react-native-unimodules": "^0.14.10",
-    "react-navigation-tabs": "^2.11.2"
+    "react-navigation-tabs": "^2.11.2",
+    "expo-dev-client": "~4.0.12"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

@@ -16,7 +16,7 @@ const App = () => {
 
       const kucoinResponse = await fetch('https://api.kucoin.com/api/v1/market/allTickers');
       const kucoinData = await kucoinResponse.json();
-  
+
       const binanceResponse = await fetch('https://api.binance.com/api/v3/ticker/price');
       const binanceData = await binanceResponse.json();
 
@@ -25,7 +25,7 @@ const App = () => {
 
       const maxDifferencePair = findMaxPriceDifference(kucoinData.data.ticker, binanceData, bybitData.result);
       setMaxPriceDifference(maxDifferencePair);
-  
+
       setLoading(false);
     } catch (error) {
       console.error('Veri çekme hatası:', error);
@@ -40,16 +40,16 @@ const App = () => {
     const firstExchangeSymbols = kucoinData.map(item => item.symbol.replace('-USDT', ''));
     const secondExchangeSymbols = binanceData.map(item => item.symbol.replace('USDT', ''));
     let commonSymbols = firstExchangeSymbols.filter(symbol => secondExchangeSymbols.includes(symbol));
-  
-    let filterSymbols = ['UMA','XMR' ,'HNT','AERGO']; // İstenilmeyenler
-  
+
+    let filterSymbols = ['']; // İstenilmeyenler
+
     commonSymbols = commonSymbols.filter(symbol => !filterSymbols.includes(symbol));
-  
+
     commonSymbols.forEach(symbol => {
       const kucoinItem = kucoinData.find(item => item.symbol === symbol + '-USDT');
       const binanceItem = binanceData.find(item => item.symbol === symbol + 'USDT');
       const bybitItem = bybitData.find(item => item.symbol === symbol + 'USDT');
-  
+
       if (kucoinItem && binanceItem && bybitItem) {
         const kucoinPrice = parseFloat(kucoinItem.last);
         const binancePrice = parseFloat(binanceItem.price);
@@ -57,13 +57,13 @@ const App = () => {
         const percentageDiffKB = calculatePercentageDifference(kucoinPrice, binancePrice);
         const percentageDiffBY = calculatePercentageDifference(binancePrice, bybitPrice);
         const percentageDiffYK = calculatePercentageDifference(bybitPrice, kucoinPrice);
-        
+
         if (percentageDiffKB < 50 || percentageDiffBY < 50 || percentageDiffYK < 50) {
           const maxDiff = Math.max(percentageDiffKB, percentageDiffBY, percentageDiffYK);
           if (maxDiff > 50) {
             return;
           }
-          
+
           if (maxDifference === null || maxDiff > maxDifference) {
             maxDifference = maxDiff;
             maxDifferencePair = {
@@ -78,10 +78,10 @@ const App = () => {
         }
       }
     });
-  
+
     return maxDifferencePair;
   };
-  
+
   const calculatePercentageDifference = (higherPrice, lowerPrice) => {
     const percentageDifference = ((higherPrice - lowerPrice) / lowerPrice) * 100;
     return Math.abs(percentageDifference);
@@ -96,10 +96,19 @@ const App = () => {
   }, []);
 
   const handleCalculate = () => {
-    const amount = parseFloat(transactionAmount);
+    let amount = parseFloat(transactionAmount);
     if (!isNaN(amount) && maxPriceDifference && maxPriceDifference.percentageDifference) {
-      const calculated = (amount * maxPriceDifference.percentageDifference) / 100;
-      setCalculatedAmount(calculated.toFixed(2));
+      const buyCommissionRate = 0.0075; // 0.75%
+      const sellCommissionRate = 0.0075;
+
+      const buyCommission = amount * buyCommissionRate;
+      let totalCost = amount - buyCommission;
+      const sellCommission = totalCost * sellCommissionRate;
+      amount = totalCost - sellCommission;
+      
+      const netProfit = (amount * maxPriceDifference.percentageDifference) / 100 ;
+
+      setCalculatedAmount(netProfit.toFixed(2));
     } else {
       setCalculatedAmount(null);
     }
@@ -205,8 +214,10 @@ const styles = StyleSheet.create({
   },
   transactionInput: {
     backgroundColor: '#ffffff',
-    borderRadius: 5,
-    width: 100,
+    borderRadius: 10,
+    width: 230,
+    fontSize: 18,
+    height: 35,
     paddingHorizontal: 10,
     marginBottom: 10,
   },
