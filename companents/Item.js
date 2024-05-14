@@ -3,7 +3,6 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { Foundation } from '@expo/vector-icons';
 
 const Item = ({ item }) => {
-  // Fiyatı nokta işaretinden sonra sadece 0 olmayan basamakları göster
   const formattedPrice = parseFloat(item.quote.USD.price).toFixed(3).toString().replace(/(\.\d*?[1-9])0+$/, '$1');
   const formattedChange = parseFloat(item.quote.USD.percent_change_24h).toFixed(3);
   const textColor = formattedChange < 0 ? '#C60000' : '#0c9000';

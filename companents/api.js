@@ -21,7 +21,6 @@ export const fetchData = () => {
       return response.json();
     })
     .then((data) => {
-      // Fiyatı nokta işaretinden sonra sadece 0 olmayan basamakları göster
       data.data.forEach(item => {
         item.quote.USD.price = parseFloat(item.quote.USD.price).toString().replace(/(\.\d*?[1-9])0+$/, '$1');
         item.quote.USD.percent_change_24h = parseFloat(item.quote.USD.percent_change_24h).toString().replace(/(\.\d*?[1-9])0+$/, '$1');
@@ -31,7 +30,6 @@ export const fetchData = () => {
     .catch((error) => {
       console.error("Veri alınırken hata oluştu:", error);
       if (error.message.includes("Çok fazla istek yapıldı")) {
-        // Bekle ve tekrar dene
         return delay(10000).then(() => fetchData());
       } else {
         throw error;

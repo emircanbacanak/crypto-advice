@@ -1,10 +1,14 @@
-import { StyleSheet, Pressable, View } from 'react-native';
 import React from 'react';
+import { Pressable, View, StyleSheet } from 'react-native';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 
 export default function FooterScreen() {
     const navigation = useNavigation();
+
+    if (!navigation) {
+        return null;
+    }
 
     return (
         <View style={styles.buttonContainer}>
@@ -31,7 +35,7 @@ export default function FooterScreen() {
 
 const styles = StyleSheet.create({
     buttonContainer: {
-        alignSelf:'stretch',
+        alignSelf: 'stretch',
         height: 51,
         justifyContent: 'flex-end',
         backgroundColor: '#000000',

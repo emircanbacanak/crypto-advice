@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import FooterScreen from './FooterScreen';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import fetch from 'node-fetch';
 
 const App = () => {
@@ -12,7 +11,7 @@ const App = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      setMaxPriceDifference(null); // Önbelleği temizle
+      setMaxPriceDifference(null);
 
       const kucoinResponse = await fetch('https://api.kucoin.com/api/v1/market/allTickers');
       const kucoinData = await kucoinResponse.json();
@@ -41,7 +40,7 @@ const App = () => {
     const secondExchangeSymbols = binanceData.map(item => item.symbol.replace('USDT', ''));
     let commonSymbols = firstExchangeSymbols.filter(symbol => secondExchangeSymbols.includes(symbol));
 
-    let filterSymbols = ['']; // İstenilmeyenler
+    let filterSymbols = [''];
 
     commonSymbols = commonSymbols.filter(symbol => !filterSymbols.includes(symbol));
 
@@ -105,8 +104,8 @@ const App = () => {
       let totalCost = amount - buyCommission;
       const sellCommission = totalCost * sellCommissionRate;
       amount = totalCost - sellCommission;
-      
-      const netProfit = (amount * maxPriceDifference.percentageDifference) / 100 ;
+
+      const netProfit = (amount * maxPriceDifference.percentageDifference) / 100;
 
       setCalculatedAmount(netProfit.toFixed(2));
     } else {
@@ -118,7 +117,7 @@ const App = () => {
     <View style={styles.container}>
       <Text style={styles.title}>En Yüksek Fiyat Farkı</Text>
       {loading ? (
-        <Text style={styles.loadingText}>Yükleniyor...</Text>
+        <ActivityIndicator size="large" color="#ffffff" style={{ marginTop: 20 }} />
       ) : maxPriceDifference && maxPriceDifference.higherPrice && maxPriceDifference.lowerPrice && maxPriceDifference.percentageDifference ? (
         <>
           <View style={styles.card}>
@@ -154,9 +153,7 @@ const App = () => {
       ) : (
         <Text style={styles.noDataText}>Fiyat farkı bulunamadı</Text>
       )}
-      <View style={styles.footer}>
-        <FooterScreen />
-      </View>
+
     </View>
   );
 };
@@ -217,15 +214,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 230,
     fontSize: 18,
-    height: 35,
+    height: 40,
     paddingHorizontal: 10,
     marginBottom: 10,
   },
   calculateButton: {
+    alignItems: 'center',
     backgroundColor: '#007bff',
     paddingVertical: 10,
+    marginTop: 20,
     paddingHorizontal: 20,
     borderRadius: 5,
+    width: 120,
   },
   buttonText: {
     color: '#ffffff',
@@ -235,11 +235,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 18,
     color: '#ffffff',
-  },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
   },
 });
 

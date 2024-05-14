@@ -20,6 +20,7 @@
     "android": {
       "useNextReactNativeSqlite": true,
       "hermesEnabled": true,
+      "hmr": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

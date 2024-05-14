@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, SafeAreaView, FlatList, StatusBar } from 'react-native';
-import FooterScreen from './FooterScreen';
-import Item from "../companents/Item";
-import { fetchData } from "../companents/api";
-import SearchBar from '../companents/searchBar';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, FlatList, StyleSheet, StatusBar } from 'react-native';
+import Item from '../companents/Item';
+import { fetchData } from '../companents/api';
+import { AuthContext } from '../store/auth-context';
 
-export default function HomeScreen() {
+const HomeScreen = () => {
+  const { token } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState('');
@@ -18,7 +18,7 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
-    const filtered = data.filter(item =>
+    const filtered = data.filter((item) =>
       item.name.toLowerCase().includes(searchText.toLowerCase())
     );
     setFilteredData(filtered);
@@ -26,43 +26,45 @@ export default function HomeScreen() {
 
   const fetchDataAndUpdate = async () => {
     try {
-      const res = await fetchData();
+      const res = await fetchData(token);
       setData(res.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Veri çekme hatası:', error);
     }
   };
 
   return (
-    <>
-      <SearchBar style={styles.searchBar} searchText={searchText} setSearchText={setSearchText} />
-      <View style={styles.body}>
-        <StatusBar hidden={true} />
-        <SafeAreaView>
-          <FlatList
-            data={filteredData}
-            renderItem={({ item }) => <Item item={item} />}
-            keyExtractor={(item) => item.id.toString()} />
-        </SafeAreaView>
-      </View>
-      <View style={styles.footer}>
-        <FooterScreen />
-      </View>
-    </>
+    <View style={styles.body}>
+      <StatusBar hidden={true} />
+      <FlatList
+        data={filteredData}
+        renderItem={({ item }) => <Item item={item} />}
+        keyExtractor={(item) => item.id.toString()}
+        ListHeaderComponent={
+          <View style={styles.hosgeldin}>
+            <Text style={styles.subtitle}>Borsa Güncel Bilgileri</Text>
+          </View>
+        }
+      />
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   body: {
-    height:670,
+    flex: 1,
     backgroundColor: '#000000',
   },
-  footer:{
-    marginBottom:'0%',
-    alignItems:'flex-end',
-    justifyContent:'flex-end',
+  hosgeldin: {
+    alignItems: 'center',
   },
-  searchBar: {
-    height: 5,
-  }
+  subtitle: {
+    marginTop: 10,
+    marginBottom: 10,
+    fontSize: 30,
+    fontFamily: 'Roboto',
+    color: '#FFFFFF',
+  },
 });
+
+export default HomeScreen;
