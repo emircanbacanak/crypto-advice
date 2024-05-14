@@ -40,7 +40,7 @@ const App = () => {
     const secondExchangeSymbols = binanceData.map(item => item.symbol.replace('USDT', ''));
     let commonSymbols = firstExchangeSymbols.filter(symbol => secondExchangeSymbols.includes(symbol));
 
-    let filterSymbols = [''];
+    let filterSymbols = ['XMR','OGN','ORN'];
 
     commonSymbols = commonSymbols.filter(symbol => !filterSymbols.includes(symbol));
 
@@ -99,19 +99,28 @@ const App = () => {
     if (!isNaN(amount) && maxPriceDifference && maxPriceDifference.percentageDifference) {
       const buyCommissionRate = 0.0075; // 0.75%
       const sellCommissionRate = 0.0075;
-
+  
       const buyCommission = amount * buyCommissionRate;
       let totalCost = amount - buyCommission;
       const sellCommission = totalCost * sellCommissionRate;
       amount = totalCost - sellCommission;
-
+  
       const netProfit = (amount * maxPriceDifference.percentageDifference) / 100;
-
+  
+      let transferMessage = '';
+      if (maxPriceDifference.higherPriceExchange !== maxPriceDifference.lowerPriceExchange) {
+        transferMessage = `Transfer var: ${maxPriceDifference.higherPriceExchange} ağı destekleniyor`;
+      } else {
+        transferMessage = `Transfer yok: ${maxPriceDifference.higherPriceExchange} ağı destekleniyor`;
+      }
+  
       setCalculatedAmount(netProfit.toFixed(2));
+      alert(transferMessage);
     } else {
       setCalculatedAmount(null);
     }
   };
+  
 
   return (
     <View style={styles.container}>
@@ -160,12 +169,10 @@ const App = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height:730,
     backgroundColor: '#000000',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingBottom: 120,
   },
   title: {
     fontSize: 26,

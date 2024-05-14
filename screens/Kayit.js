@@ -150,10 +150,12 @@ const Kayit = () => {
 
 const styles = StyleSheet.create({
   input: {
-    padding: 15,
+    padding: 12,
     borderRadius: 10,
+    fontSize:16,
     width: 300,
     marginTop: 20,
+    color:'#ffffff',
     backgroundColor: '#D7D8F581',
     borderWidth: 1,
     borderColor: '#D6D4C1',
@@ -177,7 +179,7 @@ const styles = StyleSheet.create({
   eyeIcon: {
     position: 'absolute',
     right: 15,
-    top: 40,
+    top: 35,
   },
   errorInput: {
     borderColor: 'red',

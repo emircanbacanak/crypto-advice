@@ -35,9 +35,12 @@ export default function FooterScreen() {
 
 const styles = StyleSheet.create({
     buttonContainer: {
-        alignSelf: 'stretch',
+        position: 'absolute',
+        bottom: 0,
+        top:730,
+        width: '100%',
+        alignSelf: 'auto',
         height: 51,
-        justifyContent: 'flex-end',
         backgroundColor: '#000000',
         flexDirection: 'row',
         justifyContent: 'space-around',

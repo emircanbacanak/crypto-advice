@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground, ActivityIndicator } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { setUserEmail } from '../companents/actions/userActions';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
@@ -11,6 +11,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const isFocused = useIsFocused();
@@ -24,7 +25,7 @@ const LoginScreen = () => {
   }, [isFocused]);
 
   const handleLogin = async () => {
-    if (!password.trim()) { // Şifrenin boş olup olmadığını kontrol ediyoruz
+    if (!password.trim()) {
       Alert.alert('Uyarı', 'Şifre boş olamaz.');
       return;
     }
@@ -35,7 +36,8 @@ const LoginScreen = () => {
         Alert.alert('Uyarı', 'Geçerli bir e-posta adresi giriniz.');
         return;
       }
-
+      
+      setLoading(true);
       const userCredential = await auth.signInWithEmailAndPassword(email, password);
       const user = userCredential.user;
       dispatch(setUserEmail(user.email));
@@ -52,6 +54,8 @@ const LoginScreen = () => {
         console.error('Giriş hatası: ', error);
         Alert.alert('Uyarı', 'Giriş yapılamadı. Lütfen bilgilerinizi kontrol edin.');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -101,6 +105,11 @@ const LoginScreen = () => {
         <TouchableOpacity activeOpacity={0.8} style={[styles.button, styles.shadow]} onPress={handleLogin}>
           <Text style={styles.buttonText}>Giriş Yap</Text>
         </TouchableOpacity>
+        {loading && (
+          <View style={styles.overlay}>
+            <ActivityIndicator size="large" color="#FFFFFF" />
+          </View>
+        )}
       </ImageBackground>
     </View>
   );
@@ -131,10 +140,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   input: {
-    color: '#000000',
-    padding: 15,
+    color: '#FFFFFF',
+    padding: 12,
     borderRadius: 10,
-    fontSize: 15,
+    fontSize: 16,
     width: 300,
     marginTop: 20,
     backgroundColor: '#D7D8F581',
@@ -147,10 +156,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   passwordInput: {
-    color: '#000000',
-    padding: 15,
+    color: '#FFFFFF',
+    padding: 12,
     borderRadius: 10,
-    fontSize: 15,
+    fontSize: 16,
     width: 300,
     marginTop: 20,
     backgroundColor: '#D7D8F581',
@@ -160,7 +169,7 @@ const styles = StyleSheet.create({
   eyeIcon: {
     position: 'absolute',
     right: 15,
-    top: 40,
+    top: 35,
   },
   subtitle: {
     marginTop: 10,
@@ -172,7 +181,7 @@ const styles = StyleSheet.create({
   },
   subtitleText: {
     color: '#ffffff',
-    fontSize: 15,
+    fontSize: 16,
     fontFamily: 'Roboto',
   },
   errorInput: {
@@ -191,6 +200,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     fontFamily: 'Roboto',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

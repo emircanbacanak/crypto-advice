@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import { StatusBar } from 'react-native';
+import { StatusBar ,StyleSheet } from 'react-native';
 import store from './companents/store'; // İçe aktarmaları düzelt
 
 import LoginScreen from './screens/LoginScreen';
@@ -54,7 +54,7 @@ const App = () => {
           {isAuthenticated ? (
             <>
               <AppNavigation />
-              <FooterScreen />
+              <FooterScreen/>
             </>
           ) : (
             <AppNavigation />

@@ -32,7 +32,7 @@ const ForgetPassword = () => {
   };
 
   return (
-    <ImageBackground source={{ uri: 'https://i.hizliresim.com/7g68l5i.jpg' }} style={styles.container} >
+    <ImageBackground source={{ uri: 'https://i.hizliresim.com/7g68l5i.jpg' }} >
       <View style={styles.container}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Login')}>
           <Text style={styles.backButtonText}>Geri</Text>
@@ -42,7 +42,7 @@ const ForgetPassword = () => {
           style={styles.input}
           placeholder="E-posta adresinizi girin"
           placeholderTextColor="#FFFFFFAD"
-          color="#000000"
+          color="#FFFFFF"
           selectionColor={"#FFFFFF39"}
           value={email}
           onChangeText={setEmail}
@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
   container: {
     width:'100%',
     height:'100%',
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -83,8 +82,9 @@ const styles = StyleSheet.create({
     color:'#FFFFFF'
   },
   input: {
-    padding: 15,
+    padding: 12,
     borderRadius: 10,
+    fontSize:16,
     width: 300,
     marginTop: 20,
     backgroundColor: '#D7D8F581',
@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#ffffff',
     fontWeight: 'bold',
+    fontSize:16,
   },
 });
 
