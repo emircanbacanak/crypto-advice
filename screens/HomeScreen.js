@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, StatusBar, ActivityIndicator } from 'react-native';
+import { AppState, View, Text, FlatList, StyleSheet, StatusBar } from 'react-native';
 import Item from '../companents/Item';
-import { fetchData } from '../companents/api';
+import { fetchDataAndUpdate } from '../companents/api';
 import { AuthContext } from '../store/auth-context';
 import SearchBar from '../companents/searchBar';
 
@@ -10,62 +10,71 @@ const HomeScreen = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState('');
+  const [isActive, setIsActive] = useState(true); // Ana ekranın aktif olup olmadığını kontrol etmek için durum
 
   useEffect(() => {
-    fetchDataAndUpdate();
-    const intervalId = setInterval(fetchDataAndUpdate, 20000);
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      setIsActive(nextAppState === 'active');
+    });
 
-    return () => clearInterval(intervalId);
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   useEffect(() => {
-    const filtered = data.filter((item) =>
-      item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      item.name.toUpperCase().includes(searchText.toUpperCase()) ||
-      item.symbol.toLowerCase().includes(searchText.toLowerCase()) ||
-      item.symbol.toUpperCase().includes(searchText.toUpperCase())
-    );   
-    setFilteredData(filtered);
-  }, [data, searchText]);
-  
+    let intervalId;
 
-  const fetchDataAndUpdate = async () => {
-    try {
-      setLoading(true);
-      const res = await fetchData(token);
-      setData(res.data);
-    } catch (error) {
-      console.error('Veri çekme hatası:', error);
-    } finally {
-      setLoading(false);
+    const fetchData = async () => {
+      await fetchDataAndUpdate(token, setData, setLastUpdated);
+      intervalId = setInterval(() => {
+        fetchDataAndUpdate(token, setData, setLastUpdated);
+      }, 30000); // Her 30 saniyede bir veri al
+    };
+
+    if (isActive) { // Sadece Ana ekran aktif olduğunda veri al
+      fetchData();
+
+      return () => {
+        clearInterval(intervalId);
+      };
     }
-  };
+  }, [token, isActive]);
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      const filtered = data.filter((item) =>
+        item.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.name.toUpperCase().includes(searchText.toUpperCase()) ||
+        item.symbol.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.symbol.toUpperCase().includes(searchText.toUpperCase())
+      );
+      setFilteredData(filtered);
+    }
+  }, [data, searchText]);
 
   return (
     <View style={styles.body}>
       <StatusBar hidden={true} />
-      {loading ? (
-        <View style={[styles.container, styles.horizontal]}>
-          <ActivityIndicator size="large" color="#FFFFFF" />
-        </View>
-      ) : (
-        <FlatList
-          data={filteredData}
-          renderItem={({ item }) => <Item item={item} />}
-          keyExtractor={(item) => item.id.toString()}
-          ListHeaderComponent={
-            <>
-              <View style={styles.hosgeldin}>
-                <Text style={styles.subtitle}>Borsa Güncel Bilgileri</Text>
-              </View>
-              <View>
-                <SearchBar searchText={searchText} style={styles.search} setSearchText={setSearchText} />
-              </View>
-            </>
-          }
-        />
-      )}
+      <FlatList
+        data={filteredData}
+        renderItem={({ item }) => <Item key={item.id} item={item} isActive={isActive} />} // Item bileşenine isActive özelliğini geçir
+        keyExtractor={(item) => item.id.toString()}
+        initialNumToRender={10}
+        maxToRenderPerBatch={5}
+        ListHeaderComponent={
+          <>
+            <View style={styles.welcome}>
+              <Text style={styles.subtitle}>Borsa Güncel Bilgileri</Text>
+              {isActive && <Text style={styles.lastUpdated}>Son Güncelleme: {lastUpdated}</Text>}
+            </View>
+            <View>
+              <SearchBar searchText={searchText} style={styles.search} setSearchText={setSearchText} />
+            </View>
+          </>
+        }
+      />
     </View>
   );
 };
@@ -75,7 +84,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000000',
   },
-  hosgeldin: {
+  welcome: {
     alignItems: 'center',
   },
   subtitle: {
@@ -86,14 +95,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#FFFFFF',
   },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  horizontal: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10,
+  lastUpdated: {
+    color: '#FFFFFF',
   },
 });
 
