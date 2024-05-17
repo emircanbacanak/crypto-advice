@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground, ActivityIndicator } from 'react-native';
 import { auth, db } from '../firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
@@ -16,6 +16,7 @@ const Kayit = () => {
   const [surname, setSurname] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState({
     name: false,
     surname: false,
@@ -67,6 +68,7 @@ const Kayit = () => {
       return;
     }
 
+    setLoading(true);  // Loading durumu true olarak ayarlanıyor
     try {
       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
@@ -85,6 +87,8 @@ const Kayit = () => {
       } else {
         alert(error.message);
       }
+    } finally {
+      setLoading(false);  // Yükleme durumu false olarak ayarlanıyor
     }
   }
 
@@ -143,6 +147,11 @@ const Kayit = () => {
           <Text style={styles.buttonText}>Kayıt Ol</Text>
         </TouchableOpacity>
 
+        {loading && (
+          <View style={styles.overlay}>
+            <ActivityIndicator size="large" color="#FFFFFF" />
+          </View>
+        )}
       </ImageBackground>
     </View>
   );
@@ -230,6 +239,12 @@ const styles = StyleSheet.create({
   backButtonText: {
     color: 'white',
     fontSize: 17,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

@@ -11,7 +11,7 @@ const HomeScreen = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [lastUpdated, setLastUpdated] = useState('');
-  const [isActive, setIsActive] = useState(true); // Ana ekranın aktif olup olmadığını kontrol etmek için durum
+  const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
@@ -30,10 +30,10 @@ const HomeScreen = () => {
       await fetchDataAndUpdate(token, setData, setLastUpdated);
       intervalId = setInterval(() => {
         fetchDataAndUpdate(token, setData, setLastUpdated);
-      }, 30000); // Her 30 saniyede bir veri al
+      }, 30000);
     };
 
-    if (isActive) { // Sadece Ana ekran aktif olduğunda veri al
+    if (isActive) {
       fetchData();
 
       return () => {

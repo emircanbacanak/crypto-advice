@@ -2,9 +2,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const fetchDataAndUpdate = async (token, setData, setLastUpdated) => {
   try {
-    // İstek gönderilmeden önce 30 saniye bekleyin
     await delay(30000);
-
     const response = await fetch(
       "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest",
       {
@@ -39,9 +37,7 @@ export const fetchDataAndUpdate = async (token, setData, setLastUpdated) => {
   } catch (error) {
     console.error("Veri alınırken hata oluştu:", error);
     if (error.message.includes("Çok fazla istek yapıldı")) {
-      // İsteğin yeniden denemesi için belirli bir süre bekleyin
       await delay(30000);
-      // Yeniden deneyin
       fetchDataAndUpdate(token, setData, setLastUpdated);
     } else {
       throw error;
