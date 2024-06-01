@@ -40,7 +40,7 @@ const App = () => {
     const secondExchangeSymbols = binanceData.map(item => item.symbol.replace('USDT', ''));
     let commonSymbols = firstExchangeSymbols.filter(symbol => secondExchangeSymbols.includes(symbol));
 
-    let filterSymbols = ['XMR','OGN','ORN'];
+    let filterSymbols = ['XMR', 'OGN', 'ORN','HNT'];
 
     commonSymbols = commonSymbols.filter(symbol => !filterSymbols.includes(symbol));
 
@@ -99,28 +99,28 @@ const App = () => {
     if (!isNaN(amount) && maxPriceDifference && maxPriceDifference.percentageDifference) {
       const buyCommissionRate = 0.0075; // 0.75%
       const sellCommissionRate = 0.0075;
-  
+
       const buyCommission = amount * buyCommissionRate;
       let totalCost = amount - buyCommission;
       const sellCommission = totalCost * sellCommissionRate;
       amount = totalCost - sellCommission;
-  
+
       const netProfit = (amount * maxPriceDifference.percentageDifference) / 100;
-  
+
       let transferMessage = '';
       if (maxPriceDifference.higherPriceExchange !== maxPriceDifference.lowerPriceExchange) {
         transferMessage = `Transfer var: ${maxPriceDifference.higherPriceExchange} ağı destekleniyor`;
       } else {
         transferMessage = `Transfer yok: ${maxPriceDifference.higherPriceExchange} ağı destekleniyor`;
       }
-  
+
       setCalculatedAmount(netProfit.toFixed(2));
       alert(transferMessage);
     } else {
       setCalculatedAmount(null);
     }
   };
-  
+
 
   return (
     <View style={styles.container}>
@@ -141,7 +141,7 @@ const App = () => {
               {maxPriceDifference.lowerPriceExchange}: ${maxPriceDifference.lowerPrice.toFixed(4)}
             </Text>
           </View>
-          <View style={styles.card}>
+          <View style={styles.cardY}>
             <Text style={styles.price}>Yüzdelik Fark: %{maxPriceDifference.percentageDifference.toFixed(3)}</Text>
           </View>
           <View style={styles.transactionBox}>
@@ -169,7 +169,7 @@ const App = () => {
 
 const styles = StyleSheet.create({
   container: {
-    height:730,
+    height: '100%',
     backgroundColor: '#000000',
     justifyContent: 'center',
     alignItems: 'center',
@@ -177,7 +177,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: 30,
+    bottom: 40,
     color: '#ffffff',
   },
   loadingText: {
@@ -187,16 +188,26 @@ const styles = StyleSheet.create({
   },
   noDataText: {
     fontSize: 18,
-    marginTop: 20,
+    marginTop: 40,
     color: '#555',
   },
   card: {
     alignItems: 'center',
-    width: '75%',
+    width: '60%',
+    backgroundColor: '#EFEFEF',
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 10,
+    bottom: 40,
+  },
+  cardY: {
+    alignItems: 'center',
+    width: '60%',
     backgroundColor: '#EFEFEF',
     borderRadius: 10,
     padding: 15,
     marginVertical: 10,
+    bottom: 40,
   },
   symbol: {
     fontSize: 18,
@@ -210,6 +221,7 @@ const styles = StyleSheet.create({
   transactionBox: {
     marginTop: 20,
     alignItems: 'center',
+    bottom: 40,
   },
   transactionText: {
     fontSize: 18,
@@ -219,7 +231,7 @@ const styles = StyleSheet.create({
   transactionInput: {
     backgroundColor: '#ffffff',
     borderRadius: 10,
-    width: 230,
+    width: 245,
     fontSize: 18,
     height: 40,
     paddingHorizontal: 10,
@@ -228,8 +240,9 @@ const styles = StyleSheet.create({
   calculateButton: {
     alignItems: 'center',
     backgroundColor: '#007bff',
-    paddingVertical: 10,
-    marginTop: 20,
+    paddingVertical: 5,
+    marginTop: 30,
+    bottom: 20,
     paddingHorizontal: 20,
     borderRadius: 5,
     width: 120,

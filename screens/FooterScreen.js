@@ -10,23 +10,35 @@ export default function FooterScreen() {
         return null;
     }
 
+    const navigateToHome = () => {
+        navigation.navigate('Home');
+    };
+
+    const navigateToArbitraj = () => {
+        navigation.navigate('Arbitraj');
+    };
+
+    const navigateToSettings = () => {
+        navigation.navigate('Settings');
+    };
+
     return (
         <View style={styles.buttonContainer}>
             <Pressable
                 style={({ pressed }) => [styles.button, pressed && styles.pressed]}
-                onPress={() => navigation.navigate('Home')}>
+                onPress={navigateToHome}>
                 <Entypo name="home" style={styles.icon} size={35} color={'#fff'} />
             </Pressable>
 
             <Pressable
                 style={({ pressed }) => [styles.button, pressed && styles.pressed]}
-                onPress={() => navigation.navigate('Arbitraj')}>
+                onPress={navigateToArbitraj}>
                 <FontAwesome name="signal" size={35} color="#fff" />
             </Pressable>
 
             <Pressable
                 style={({ pressed }) => [styles.button, pressed && styles.pressed]}
-                onPress={() => navigation.navigate('Settings')}>
+                onPress={navigateToSettings}>
                 <FontAwesome name="user" style={styles.icon} size={35} color="#fff" />
             </Pressable>
         </View>
@@ -37,9 +49,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         position: 'absolute',
         bottom: 0,
-        top:730,
         width: '100%',
-        alignSelf: 'auto',
         height: 51,
         backgroundColor: '#000000',
         flexDirection: 'row',

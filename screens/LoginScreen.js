@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground, ActivityIndicator } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { setUserEmail } from '../companents/actions/userActions';
@@ -15,6 +15,8 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const isFocused = useIsFocused();
+
+  const passwordRef = useRef(null);
 
   useEffect(() => {
     if (isFocused) {
@@ -36,7 +38,7 @@ const LoginScreen = () => {
         Alert.alert('Uyarı', 'Geçerli bir e-posta adresi giriniz.');
         return;
       }
-      
+
       setLoading(true);
       const userCredential = await auth.signInWithEmailAndPassword(email, password);
       const user = userCredential.user;
@@ -77,9 +79,13 @@ const LoginScreen = () => {
           keyboardType="email-address"
           autoCapitalize="none"
           selectionColor="#FFFFFF39"
+          returnKeyType="next"
+          onSubmitEditing={() => passwordRef.current.focus()}
+          blurOnSubmit={false}
         />
         <View style={styles.passwordContainer}>
           <TextInput
+            ref={passwordRef}
             style={[styles.passwordInput, emailError && styles.errorInput]}
             autoCorrect={false}
             placeholder="Şifre"
@@ -89,6 +95,9 @@ const LoginScreen = () => {
             value={password}
             selectionColor="#FFFFFF39"
             autoCapitalize="none"
+            returnKeyType="done"
+            onSubmitEditing={handleLogin}
+            blurOnSubmit={false}
           />
           <TouchableOpacity style={styles.eyeIcon} onPress={() => setShowPassword(!showPassword)}>
             <Icon name={showPassword ? 'eye' : 'eye-slash'} size={20} color="#FFFFFF" />
@@ -102,7 +111,11 @@ const LoginScreen = () => {
             <Text style={styles.subtitleText}>Şifremi Unuttum</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity activeOpacity={0.8} style={[styles.button, styles.shadow]} onPress={handleLogin}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={[styles.button, styles.shadow]}
+          onPress={handleLogin}
+        >
           <Text style={styles.buttonText}>Giriş Yap</Text>
         </TouchableOpacity>
         {loading && (
@@ -194,6 +207,7 @@ const styles = StyleSheet.create({
     width: 210,
     borderRadius: 50,
     marginTop: '5%',
+    marginBottom: '5%',
   },
   buttonText: {
     color: 'white',

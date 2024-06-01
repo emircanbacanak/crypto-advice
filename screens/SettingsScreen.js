@@ -138,8 +138,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   cikis: {
-    fontSize: 20,
-    color: '#FFFFFF'
+    color:'#ff0000',
+    fontSize: 18,
   },
   pressed: {
     opacity: 0.5,
@@ -151,13 +151,12 @@ const styles = StyleSheet.create({
     color: '#ffffff'
   },
   exit: {
-    top: 180,
+    top: 50,
     alignSelf:'center',
     height:40,
     width:75,
     borderRadius:15,
     alignItems:'center',
     justifyContent:'center',
-    backgroundColor: '#FF0000',
   }
 });

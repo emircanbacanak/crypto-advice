@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import { StatusBar ,StyleSheet } from 'react-native';
-import store from './companents/store'; // İçe aktarmaları düzelt
-
+import { StatusBar, Keyboard } from 'react-native';
+import store from './companents/store';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
@@ -37,15 +36,28 @@ const CustomTransition = {
 };
 
 const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
+    const unsubscribeAuth = auth.onAuthStateChanged(user => {
       setIsAuthenticated(!!user);
     });
 
-    return unsubscribe;
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setIsKeyboardVisible(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setIsKeyboardVisible(false);
+    });
+
+    return () => {
+      unsubscribeAuth();
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
   }, []);
+
   return (
     <Provider store={store}>
       <NavigationContainer>
@@ -54,7 +66,7 @@ const App = () => {
           {isAuthenticated ? (
             <>
               <AppNavigation />
-              <FooterScreen/>
+              {!isKeyboardVisible && <FooterScreen />}
             </>
           ) : (
             <AppNavigation />
@@ -66,13 +78,10 @@ const App = () => {
 };
 
 const AppNavigation = () => {
-  const navigationRef = React.useRef(null);
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
         console.log("Kullanıcı oturum açmış");
-        navigationRef.current?.navigate('Home');
       } else {
         console.log("Kullanıcı oturum açmamış");
       }

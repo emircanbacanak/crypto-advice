@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground, ActivityIndicator } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground, ActivityIndicator, ScrollView } from 'react-native';
 import { auth, db } from '../firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
@@ -23,6 +23,11 @@ const Kayit = () => {
     email: false,
     password: false,
   });
+
+  // References for TextInput fields
+  const surnameRef = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -93,78 +98,104 @@ const Kayit = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <ImageBackground source={{ uri: 'https://i.hizliresim.com/7g68l5i.jpg' }} style={styles.container}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Text style={styles.backButtonText}>Geri</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>Kayıt Ol</Text>
-        <TextInput
-          style={[styles.input, error.name && styles.errorInput]}
-          autoCapitalize="sentences"
-          autoCorrect={false}
-          placeholder="İsim"
-          selectionColor={"#FFFFFF39"}
-          placeholderTextColor={"#ffffff"}
-          onChangeText={(text) => setName(text)}
-        />
-        <TextInput
-          style={[styles.input, error.surname && styles.errorInput]}
-          autoCapitalize="sentences"
-          autoCorrect={false}
-          selectionColor={"#FFFFFF39"}
-          placeholder="Soyisim"
-          placeholderTextColor={"#ffffff"}
-          onChangeText={(text) => setSurname(text)}
-        />
-        <TextInput
-          style={[styles.input, error.email && styles.errorInput]}
-          autoCapitalize="none"
-          autoCorrect={false}
-          selectionColor={"#FFFFFF39"}
-          keyboardType="email-address"
-          placeholder="E-Posta"
-          placeholderTextColor={"#ffffff"}
-          onChangeText={(text) => setEmail(text)}
-        />
-        <View style={styles.passwordContainer}>
+    <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+      <View style={styles.container}>
+        <ImageBackground source={{ uri: 'https://i.hizliresim.com/7g68l5i.jpg' }} style={styles.container}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Text style={styles.backButtonText}>Geri</Text>
+          </TouchableOpacity>
+          <Text style={styles.title}>Kayıt Ol</Text>
           <TextInput
-            style={[styles.input, error.password && styles.errorInput]}
+            style={[styles.input, error.name && styles.errorInput]}
+            autoCapitalize="sentences"
+            autoCorrect={false}
+            placeholder="İsim"
+            selectionColor={"#FFFFFF39"}
+            placeholderTextColor={"#ffffff"}
+            onChangeText={(text) => setName(text)}
+            returnKeyType="next"
+            onSubmitEditing={() => surnameRef.current.focus()}
+            blurOnSubmit={false}
+          />
+          <TextInput
+            ref={surnameRef}
+            style={[styles.input, error.surname && styles.errorInput]}
+            autoCapitalize="sentences"
+            autoCorrect={false}
+            selectionColor={"#FFFFFF39"}
+            placeholder="Soyisim"
+            placeholderTextColor={"#ffffff"}
+            onChangeText={(text) => setSurname(text)}
+            returnKeyType="next"
+            onSubmitEditing={() => emailRef.current.focus()}
+            blurOnSubmit={false}
+          />
+          <TextInput
+            ref={emailRef}
+            style={[styles.input, error.email && styles.errorInput]}
             autoCapitalize="none"
             autoCorrect={false}
             selectionColor={"#FFFFFF39"}
-            placeholder="Şifre"
+            keyboardType="email-address"
+            placeholder="E-Posta"
             placeholderTextColor={"#ffffff"}
-            secureTextEntry={!showPassword}
-            onChangeText={(text) => setPassword(text)}
+            onChangeText={(text) => setEmail(text)}
+            returnKeyType="next"
+            onSubmitEditing={() => passwordRef.current.focus()}
+            blurOnSubmit={false}
           />
-          <TouchableOpacity style={styles.eyeIcon} onPress={() => setShowPassword(!showPassword)}>
-            <Icon name={showPassword ? 'eye' : 'eye-slash'} size={20} color="#FFFFFF" />
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity activeOpacity={0.8} style={[styles.button, styles.shadow]} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Kayıt Ol</Text>
-        </TouchableOpacity>
-
-        {loading && (
-          <View style={styles.overlay}>
-            <ActivityIndicator size="large" color="#FFFFFF" />
+          <View style={styles.passwordContainer}>
+            <TextInput
+              ref={passwordRef}
+              style={[styles.input, error.password && styles.errorInput]}
+              autoCapitalize="none"
+              autoCorrect={false}
+              selectionColor={"#FFFFFF39"}
+              placeholder="Şifre"
+              placeholderTextColor={"#ffffff"}
+              secureTextEntry={!showPassword}
+              onChangeText={(text) => setPassword(text)}
+              returnKeyType="done"
+              onSubmitEditing={handleSignUp}  // handleSignUp fonksiyonunu doğrudan çağır
+              blurOnSubmit={false}
+            />
+            <TouchableOpacity style={styles.eyeIcon} onPress={() => setShowPassword(!showPassword)}>
+              <Icon name={showPassword ? 'eye' : 'eye-slash'} size={20} color="#FFFFFF" />
+            </TouchableOpacity>
           </View>
-        )}
-      </ImageBackground>
-    </View>
+
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={[styles.button, styles.shadow]}
+            onPress={handleSignUp}  // handleSignUp fonksiyonunu doğrudan çağır
+          >
+            <Text style={styles.buttonText}>Kayıt Ol</Text>
+          </TouchableOpacity>
+
+          {loading && (
+            <View style={styles.overlay}>
+              <ActivityIndicator size="large" color="#FFFFFF" />
+            </View>
+          )}
+        </ImageBackground>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   input: {
     padding: 12,
     borderRadius: 10,
-    fontSize:16,
+    fontSize: 16,
     width: 300,
     marginTop: 20,
-    color:'#ffffff',
+    color: '#ffffff',
     backgroundColor: '#D7D8F581',
     borderWidth: 1,
     borderColor: '#D6D4C1',
@@ -212,10 +243,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000",
     padding: 13,
     borderRadius: 15,
-    marginTop: 10,
     width: 200,
     borderRadius: 50,
     marginTop: "10%",
+    marginBottom: "5%",
   },
   buttonText: {
     color: "white",

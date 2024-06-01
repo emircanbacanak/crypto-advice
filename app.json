@@ -15,12 +15,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.companyname.arbitraj"
     },
     "android": {
       "useNextReactNativeSqlite": true,
       "hermesEnabled": true,
       "hmr": true,
+      "package": "com.companyname.arbitraj",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

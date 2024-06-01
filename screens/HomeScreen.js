@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AppState, View, Text, FlatList, StyleSheet, StatusBar } from 'react-native';
+import { AppState, View, Text, FlatList, StyleSheet, StatusBar, ActivityIndicator } from 'react-native';
 import Item from '../companents/Item';
-import { fetchDataAndUpdate } from '../companents/api';
 import { AuthContext } from '../store/auth-context';
 import SearchBar from '../companents/searchBar';
 
@@ -12,6 +11,7 @@ const HomeScreen = () => {
   const [searchText, setSearchText] = useState('');
   const [lastUpdated, setLastUpdated] = useState('');
   const [isActive, setIsActive] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextAppState) => {
@@ -23,65 +23,119 @@ const HomeScreen = () => {
     };
   }, []);
 
+  const fetchDataAndUpdate = async () => {
+    try {
+      const response = await fetch(
+        "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest",
+        {
+          method: "GET",
+          headers: {
+            "X-CMC_PRO_API_KEY": "a55ee132-df67-479f-971a-a4bcade81dfb",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          throw new Error("Çok fazla istek yapıldı. Bir süre bekleyin ve tekrar deneyin.");
+        } else {
+          throw new Error("API'den geçersiz yanıt alındı: " + response.status);
+        }
+      }
+
+      const data = await response.json();
+
+      data.data.forEach((item) => {
+        item.quote.USD.price = parseFloat(item.quote.USD.price).toString().replace(/(\.\d*?[1-9])0+$/, '$1');
+        item.quote.USD.percent_change_24h = parseFloat(item.quote.USD.percent_change_24h).toString().replace(/(\.\d*?[1-9])0+$/, '$1');
+      });
+
+      const currentDate = new Date().toLocaleString();
+      setLastUpdated(currentDate);
+
+      if (setData) {
+        setData(data.data);
+      }
+    } catch (error) {
+      console.error("Veri alınırken hata oluştu:", error);
+      if (error.message.includes("Çok fazla istek yapıldı")) {
+        setTimeout(() => {
+          fetchDataAndUpdate();
+        }, 30000);
+      } else {
+        throw error;
+      }
+    }
+  };
+
   useEffect(() => {
     let intervalId;
-
     const fetchData = async () => {
-      await fetchDataAndUpdate(token, setData, setLastUpdated);
-      intervalId = setInterval(() => {
-        fetchDataAndUpdate(token, setData, setLastUpdated);
-      }, 30000);
+      await fetchDataAndUpdate();
     };
 
     if (isActive) {
       fetchData();
-
-      return () => {
-        clearInterval(intervalId);
-      };
+      intervalId = setInterval(fetchData, 30000);
     }
-  }, [token, isActive]);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [isActive]);
 
   useEffect(() => {
     if (data && data.length > 0) {
       const filtered = data.filter((item) =>
         item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-        item.name.toUpperCase().includes(searchText.toUpperCase()) ||
-        item.symbol.toLowerCase().includes(searchText.toLowerCase()) ||
-        item.symbol.toUpperCase().includes(searchText.toUpperCase())
+        item.symbol.toLowerCase().includes(searchText.toLowerCase())
       );
       setFilteredData(filtered);
     }
   }, [data, searchText]);
 
+  useEffect(() => {
+    setLoading(true);
+    if (data.length > 0) {
+      setLoading(false);
+    }
+  }, [data]);
+
   return (
     <View style={styles.body}>
       <StatusBar hidden={true} />
-      <FlatList
-        data={filteredData}
-        renderItem={({ item }) => <Item key={item.id} item={item} isActive={isActive} />} // Item bileşenine isActive özelliğini geçir
-        keyExtractor={(item) => item.id.toString()}
-        initialNumToRender={10}
-        maxToRenderPerBatch={5}
-        ListHeaderComponent={
-          <>
-            <View style={styles.welcome}>
-              <Text style={styles.subtitle}>Borsa Güncel Bilgileri</Text>
-              {isActive && <Text style={styles.lastUpdated}>Son Güncelleme: {lastUpdated}</Text>}
-            </View>
-            <View>
-              <SearchBar searchText={searchText} style={styles.search} setSearchText={setSearchText} />
-            </View>
-          </>
-        }
-      />
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#FFFFFF" />
+          <Text style={styles.loadingText}>Veriler Yükleniyor...</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={filteredData}
+          renderItem={({ item }) => <Item key={item.id} item={item} />}
+          keyExtractor={(item) => item.id.toString()}
+          initialNumToRender={10}
+          maxToRenderPerBatch={5}
+          ListHeaderComponent={
+            <>
+              <View style={styles.welcome}>
+                <Text style={styles.subtitle}>Borsa Güncel Bilgileri</Text>
+                {isActive && <Text style={styles.lastUpdated}>Son Güncelleme: {lastUpdated}</Text>}
+              </View>
+              <View>
+                <SearchBar searchText={searchText} setSearchText={setSearchText} />
+              </View>
+            </>
+          }
+        />
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   body: {
-    flex: 1,
+    height: '93%',
     backgroundColor: '#000000',
   },
   welcome: {
@@ -97,6 +151,15 @@ const styles = StyleSheet.create({
   },
   lastUpdated: {
     color: '#FFFFFF',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    color: '#FFFFFF',
+    marginTop: 10,
   },
 });
 
