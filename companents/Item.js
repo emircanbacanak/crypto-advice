@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions  } from "react-native";
 import * as Animatable from 'react-native-animatable';
 import { LineChart } from "react-native-chart-kit";
 
@@ -72,13 +72,14 @@ class Item extends PureComponent {
   render() {
     const { item } = this.props;
     const { expanded, chartData, errorMessage, currentPrice, symbolImage } = this.state;
-
+    const chartWidth = Dimensions.get('window').width * 0.84;
+    const chartHeight = Dimensions.get('window').width * 0.60 ;
     return (
       <TouchableOpacity onPress={this.handlePress}>
         <Animatable.View
           style={[styles.container, { height: expanded ? 300 : 80 }]}
           transition="height"
-          duration={500}
+          duration={800}
           easing="ease"
         >
           <View style={styles.topContainer}>
@@ -115,8 +116,8 @@ class Item extends PureComponent {
                     },
                   ],
                 }}
-                width={320}
-                height={215}
+                width={chartWidth}
+                height={chartHeight}
                 yAxisSuffix="$"
                 chartConfig={{
                   backgroundColor: "#EFEFEF",
@@ -126,7 +127,7 @@ class Item extends PureComponent {
                   color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                   labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                   style: {
-                    borderRadius: 10,
+                    borderRadius: 16,
                   },
                   propsForDots: {
                     r: "2",
@@ -136,7 +137,7 @@ class Item extends PureComponent {
                 }}
                 bezier
                 style={{
-                  borderRadius: 16,
+                  borderRadius: 8,
                 }}
               />
             ) : null}
@@ -152,13 +153,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     backgroundColor: '#EFEFEF',
-    width: '80%',
+    width: '84%',
     padding: 20,
     margin: 10,
     borderRadius: 10,
   },
   graf: {
-    paddingLeft: 5,
+    paddingLeft: 0,
   },
   topContainer: {
     flexDirection: 'row',
