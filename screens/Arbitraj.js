@@ -34,6 +34,12 @@ const App = () => {
     return () => clearInterval(fetchDataInterval);
   }, []);
 
+  useEffect(() => {
+    if (loading) {
+      setCalculatedAmount(null);
+    }
+  }, [loading]);
+
   const loadUserEmail = async () => {
     try {
       const email = await AsyncStorage.getItem('userEmail');
@@ -165,8 +171,17 @@ const App = () => {
     if (!transactionAmount || !maxPriceDifference) return;
 
     const amount = parseFloat(transactionAmount);
-    const calculated = amount * (maxPriceDifference.percentageDifference / 100);
-    setCalculatedAmount(calculated.toFixed(2));
+    const commissionRate = 0.002;
+    const transferFee = 0.0;
+
+    const higherPrice = maxPriceDifference.higherPrice;
+    const lowerPrice = maxPriceDifference.lowerPrice;
+
+    const grossProfit = amount * ((higherPrice - lowerPrice) / lowerPrice);
+    const commission = amount * commissionRate;
+    const netProfit = grossProfit - commission - transferFee;
+
+    setCalculatedAmount(netProfit.toFixed(2));
   };
 
   const handleDelete = async (id) => {
@@ -174,6 +189,7 @@ const App = () => {
     setAlarms(updatedAlarms);
     saveAlarms(updatedAlarms);
   };
+  
   return (
     <Provider store={store}>
       <View style={styles.container}>
@@ -243,7 +259,7 @@ const App = () => {
               </TouchableOpacity>
             </View>
             {calculatedAmount !== null && (
-              <Text style={styles.calculatedAmount}>Kazanç: {calculatedAmount.toFixed(2)} USDT</Text>
+              <Text style={styles.calculatedAmount}>Kazanç: {calculatedAmount} USDT</Text>
             )}
           </>
         ) : (
@@ -398,8 +414,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   alarmsContainer: {
-    flex: 1,
-    marginBottom: 30,
+    flex: 0.688,
+    top:'30%',
+    paddingBottom:160,
   },
   alarmsTitle: {
     fontSize: 20,
