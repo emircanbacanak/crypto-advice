@@ -72,8 +72,13 @@ class Item extends PureComponent {
   render() {
     const { item } = this.props;
     const { expanded, chartData, errorMessage, currentPrice, symbolImage } = this.state;
-    const chartWidth = Dimensions.get('window').width * 0.84;
-    const chartHeight = Dimensions.get('window').width * 0.60;
+    const chartWidth = Dimensions.get('window').width * 0.90; // Grafiğin genişliğini artırdık
+    const chartHeight = Dimensions.get('window').width * 0.52;
+
+    // Daha az etiket gösterme
+    const labels = chartData ? chartData.prices.map(priceData => priceData[0]).filter((_, i) => i % 2 === 0) : [];
+    const data = chartData ? chartData.prices.map(priceData => priceData[1]).filter((_, i) => i % 2 === 0) : [];
+
     return (
       <TouchableOpacity onPress={this.handlePress}>
         <Animatable.View
@@ -109,10 +114,10 @@ class Item extends PureComponent {
             ) : expanded && chartData && chartData.prices && chartData.prices.length > 0 ? (
               <LineChart
                 data={{
-                  labels: chartData.prices.map(priceData => priceData[0]),
+                  labels: labels,
                   datasets: [
                     {
-                      data: chartData.prices.map(priceData => priceData[1]),
+                      data: data,
                     },
                   ],
                 }}
@@ -141,6 +146,7 @@ class Item extends PureComponent {
                 bezier
                 style={{
                   borderRadius: 8,
+                  alignSelf: 'flex-end', // Grafiği sağa yaslamak için eklendi
                 }}
               />
             ) : null}
@@ -156,7 +162,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     backgroundColor: '#EFEFEF',
-    width: '84%',
+    width: '90%', // Genişliği artırdık
     padding: 20,
     margin: 10,
     borderRadius: 10,

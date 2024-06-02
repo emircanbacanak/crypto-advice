@@ -135,7 +135,7 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   body: {
-    height: '94%',
+    height: '96%',
     backgroundColor: '#000000',
   },
   welcome: {
