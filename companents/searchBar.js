@@ -57,12 +57,10 @@ const styles = StyleSheet.create({
     paddingRight: 50,
     paddingVertical: 30,
     backgroundColor: '#000',
-    borderBottomWidth: 1,
-    borderBottomColor: '#000',
   },
   iconContainer: {
     position: 'absolute',
-    paddingBottom: 22,
+    paddingBottom: 15,
     paddingLeft: 20,
   },
   icon: {
@@ -70,7 +68,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     position: 'absolute',
-    top: 0,
+    top: 5,
     right: 0,
     marginRight: 45,
     backgroundColor: '#ffffff',

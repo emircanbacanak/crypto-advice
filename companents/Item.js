@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions  } from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import * as Animatable from 'react-native-animatable';
 import { LineChart } from "react-native-chart-kit";
 
@@ -73,7 +73,7 @@ class Item extends PureComponent {
     const { item } = this.props;
     const { expanded, chartData, errorMessage, currentPrice, symbolImage } = this.state;
     const chartWidth = Dimensions.get('window').width * 0.84;
-    const chartHeight = Dimensions.get('window').width * 0.60 ;
+    const chartHeight = Dimensions.get('window').width * 0.60;
     return (
       <TouchableOpacity onPress={this.handlePress}>
         <Animatable.View
@@ -122,10 +122,10 @@ class Item extends PureComponent {
                 chartConfig={{
                   backgroundColor: "#EFEFEF",
                   backgroundGradientFrom: "#EFEFEF",
-                  backgroundGradientTo: "#EFEFEF",
-                  decimalPlaces: 1,
-                  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                  labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                  backgroundGradientTo: "#EFEFEF", 
+                  decimalPlaces: 4,
+                  color: (opacity = 0) => `rgba(0, 0, 0, ${opacity})`,
+                  labelColor: (opacity = 0) => `rgba(0, 0, 0, ${opacity})`,
                   style: {
                     borderRadius: 16,
                   },
@@ -133,6 +133,9 @@ class Item extends PureComponent {
                     r: "2",
                     strokeWidth: "1",
                     stroke: "#ffa726",
+                  },
+                  propsForBackgroundLines: {
+                    stroke: "#EFEFEF",
                   },
                 }}
                 bezier
@@ -159,13 +162,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   graf: {
+    paddingTop: 24,
     paddingLeft: 0,
   },
   topContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
   },
   leftColumn: {
     paddingRight: 10,
