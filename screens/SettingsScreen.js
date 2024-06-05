@@ -55,7 +55,7 @@ export default function SettingsScreen({ route }) {
 
       <View style={styles.inputContainer}>
 
-        <View style={styles.underline}></View>
+        <View style={styles.underline}/>
 
         <View style={styles.inputRow}>
           <Text style={styles.text}>Ad</Text>
@@ -63,7 +63,7 @@ export default function SettingsScreen({ route }) {
           <Text style={styles.input}>{userName}</Text>
         </View>
 
-        <View style={styles.underline}></View>
+        <View style={styles.underline}/>
 
         <View style={styles.inputRow}>
           <Text style={styles.text}>Soyad</Text>
@@ -71,7 +71,7 @@ export default function SettingsScreen({ route }) {
           <Text style={styles.input}>{userSurname}</Text>
         </View>
 
-        <View style={styles.underline}></View>
+        <View style={styles.underline}/>
 
         <View style={styles.inputRow}>
           <Text style={styles.text}>E-Mail</Text>
@@ -79,7 +79,7 @@ export default function SettingsScreen({ route }) {
           <Text style={styles.input}>{userEmail}</Text>
         </View>
 
-        <View style={styles.underline}></View>
+        <View style={styles.underline}/>
 
         <View style={styles.exit}>
           <StatusBar hidden={true} />
@@ -89,7 +89,6 @@ export default function SettingsScreen({ route }) {
           >
             <Text style={styles.cikis}>ÇIKIŞ</Text>
           </Pressable>
-
         </View>
       </View>
     </View>
@@ -138,7 +137,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   cikis: {
-    color:'#ff0000',
+    color: '#ff0000',
     fontSize: 18,
   },
   pressed: {
@@ -152,11 +151,11 @@ const styles = StyleSheet.create({
   },
   exit: {
     top: 50,
-    alignSelf:'center',
-    height:40,
-    width:75,
-    borderRadius:15,
-    alignItems:'center',
-    justifyContent:'center',
+    alignSelf: 'center',
+    height: 40,
+    width: 75,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 });

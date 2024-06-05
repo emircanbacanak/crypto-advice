@@ -3,6 +3,16 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from "rea
 import * as Animatable from 'react-native-animatable';
 import { LineChart } from "react-native-chart-kit";
 
+function formatPrice(price) {
+  if (price >= 10000) {
+    return price.toFixed(1);
+  } else if (price >= 1000) {
+    return price.toFixed(2);
+  } else {
+    return price.toFixed(3);
+  }
+}
+
 class Item extends PureComponent {
   state = {
     expanded: false,
@@ -72,19 +82,18 @@ class Item extends PureComponent {
   render() {
     const { item } = this.props;
     const { expanded, chartData, errorMessage, currentPrice, symbolImage } = this.state;
-    const chartWidth = Dimensions.get('window').width * 0.90; // Grafiğin genişliğini artırdık
-    const chartHeight = Dimensions.get('window').width * 0.52;
-
-    // Daha az etiket gösterme
-    const labels = chartData ? chartData.prices.map(priceData => priceData[0]).filter((_, i) => i % 2 === 0) : [];
-    const data = chartData ? chartData.prices.map(priceData => priceData[1]).filter((_, i) => i % 2 === 0) : [];
+    const chartWidth = Dimensions.get('window').width * 0.83;
+    const chartHeight = Dimensions.get('window').width * 0.55;
+    const labels = chartData ? chartData.prices.map(priceData => priceData[0]).filter((_, i) => i === i) : [];
+    const data = chartData ? chartData.prices.map(priceData => priceData[1]).filter((_, i) => i === i) : [];
+    const formattedData = data.map(formatPrice);
 
     return (
       <TouchableOpacity onPress={this.handlePress}>
         <Animatable.View
-          style={[styles.container, { height: expanded ? 300 : 80 }]}
+          style={[styles.container, { height: expanded ? 280 : 80 }]}
           transition="height"
-          duration={800}
+          duration={500}
           easing="ease"
         >
           <View style={styles.topContainer}>
@@ -102,14 +111,14 @@ class Item extends PureComponent {
             </View>
 
             <View style={styles.rightColumn}>
-              <Text style={styles.currentPrice}>${currentPrice ? currentPrice.toFixed(2) : '-'}</Text>
+              <Text style={styles.currentPrice}>${currentPrice ? formatPrice(currentPrice) : '-'}</Text>
             </View>
           </View>
 
           <View style={styles.graf}>
             {errorMessage ? (
               <View style={styles.errorContainer}>
-                <Text />
+
               </View>
             ) : expanded && chartData && chartData.prices && chartData.prices.length > 0 ? (
               <LineChart
@@ -117,38 +126,33 @@ class Item extends PureComponent {
                   labels: labels,
                   datasets: [
                     {
-                      data: data,
+                      data: formattedData,
                     },
                   ],
                 }}
                 width={chartWidth}
                 height={chartHeight}
-                yAxisSuffix="$"
                 chartConfig={{
                   backgroundColor: "#EFEFEF",
                   backgroundGradientFrom: "#EFEFEF",
-                  backgroundGradientTo: "#EFEFEF", 
-                  decimalPlaces: 4,
+                  backgroundGradientTo: "#EFEFEF",
+                  decimalPlaces: 1,
                   color: (opacity = 0) => `rgba(0, 0, 0, ${opacity})`,
                   labelColor: (opacity = 0) => `rgba(0, 0, 0, ${opacity})`,
-                  style: {
-                    borderRadius: 16,
-                  },
                   propsForDots: {
                     r: "2",
                     strokeWidth: "1",
                     stroke: "#ffa726",
                   },
                   propsForBackgroundLines: {
-                    stroke: "#EFEFEF",
+                    stroke: "#00000000",
                   },
+                  formatYLabel: () => '',
                 }}
                 bezier
                 style={{
-                  borderRadius: 8,
-                  alignSelf: 'flex-end', // Grafiği sağa yaslamak için eklendi
-                }}
-              />
+                  alignSelf: 'flex-end',
+                }} />
             ) : null}
           </View>
         </Animatable.View>
@@ -162,14 +166,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     backgroundColor: '#EFEFEF',
-    width: '90%', // Genişliği artırdık
+    width: '90%',
     padding: 20,
     margin: 10,
     borderRadius: 10,
   },
   graf: {
-    paddingTop: 24,
-    paddingLeft: 0,
+    paddingLeft: 24,
+    paddingTop: 12,
   },
   topContainer: {
     flexDirection: 'row',

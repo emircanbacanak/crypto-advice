@@ -24,7 +24,6 @@ const Kayit = () => {
     password: false,
   });
 
-  // References for TextInput fields
   const surnameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -38,8 +37,6 @@ const Kayit = () => {
   }, [navigation]);
 
   const handleSignUp = async () => {
-    let hasError = false;
-
     const nameError = !name.trim();
     const surnameError = !surname.trim();
     const emailError = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -73,7 +70,7 @@ const Kayit = () => {
       return;
     }
 
-    setLoading(true);  // Loading durumu true olarak ayarlanıyor
+    setLoading(true);
     try {
       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
@@ -93,7 +90,7 @@ const Kayit = () => {
         alert(error.message);
       }
     } finally {
-      setLoading(false);  // Yükleme durumu false olarak ayarlanıyor
+      setLoading(false);
     }
   }
 
@@ -156,7 +153,7 @@ const Kayit = () => {
               secureTextEntry={!showPassword}
               onChangeText={(text) => setPassword(text)}
               returnKeyType="done"
-              onSubmitEditing={handleSignUp}  // handleSignUp fonksiyonunu doğrudan çağır
+              onSubmitEditing={handleSignUp}
               blurOnSubmit={false}
             />
             <TouchableOpacity style={styles.eyeIcon} onPress={() => setShowPassword(!showPassword)}>
@@ -167,7 +164,7 @@ const Kayit = () => {
           <TouchableOpacity
             activeOpacity={0.8}
             style={[styles.button, styles.shadow]}
-            onPress={handleSignUp}  // handleSignUp fonksiyonunu doğrudan çağır
+            onPress={handleSignUp}
           >
             <Text style={styles.buttonText}>Kayıt Ol</Text>
           </TouchableOpacity>

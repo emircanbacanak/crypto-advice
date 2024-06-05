@@ -15,14 +15,12 @@ const ForgetPassword = () => {
       setEmailError(true);
       return;
     }
-  
     try {
       const snapshot = await db.collection('Kullanicilar').where('email', '==', email).get();
       if (snapshot.empty) {
         Alert.alert('Uyarı', 'Bu e-posta adresine kayıtlı bir hesap bulunamadı.');
         return;
       }
-  
       await auth.sendPasswordResetEmail(email);
       Alert.alert('Başarılı', 'Şifre sıfırlama e-postası gönderildi.');
     } catch (error) {
@@ -58,8 +56,8 @@ const ForgetPassword = () => {
 
 const styles = StyleSheet.create({
   container: {
-    width:'100%',
-    height:'100%',
+    width: '100%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -70,21 +68,21 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     color: '#ffffff',
-    marginRight:'80%',
+    marginRight: '80%',
     fontWeight: 'bold',
     fontSize: 17,
-    padding:15,
+    padding: 15,
   },
   title: {
-    fontSize:30,
+    fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 40,
-    color:'#FFFFFF'
+    color: '#FFFFFF'
   },
   input: {
     padding: 12,
     borderRadius: 10,
-    fontSize:16,
+    fontSize: 16,
     width: 300,
     marginTop: 20,
     backgroundColor: '#D7D8F581',
@@ -92,7 +90,7 @@ const styles = StyleSheet.create({
     borderColor: '#D6D4C1',
   },
   button: {
-    alignItems:'center',
+    alignItems: 'center',
     backgroundColor: '#000000',
     padding: 13,
     borderRadius: 15,
@@ -103,7 +101,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#ffffff',
     fontWeight: 'bold',
-    fontSize:16,
+    fontSize: 16,
   },
 });
 

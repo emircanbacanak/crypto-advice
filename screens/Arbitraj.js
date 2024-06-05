@@ -26,11 +26,9 @@ const App = () => {
 
   useEffect(() => {
     const fetchDataInterval = setInterval(fetchData, 30000);
-
     fetchData();
     loadUserEmail();
     loadAlarms();
-
     return () => clearInterval(fetchDataInterval);
   }, []);
 
@@ -120,7 +118,6 @@ const App = () => {
         }
       }
     });
-
     return maxDifferencePair;
   };
 
@@ -189,7 +186,7 @@ const App = () => {
     setAlarms(updatedAlarms);
     saveAlarms(updatedAlarms);
   };
-  
+
   return (
     <Provider store={store}>
       <View style={styles.container}>
@@ -293,7 +290,7 @@ const App = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 2,
     backgroundColor: '#000000',
     padding: 20,
     paddingTop: 40,
@@ -375,6 +372,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#00000000',
   },
   modalContent: {
+    marginBottom: 100,
     backgroundColor: '#333333',
     borderRadius: 10,
     padding: 20,
@@ -414,9 +412,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   alarmsContainer: {
-    flex: 0.688,
-    top:'30%',
-    paddingBottom:160,
+    paddingTop: 180,
+    flex: 0.91,
+    justifyContent: 'flex-end',
+    position: 'static',
   },
   alarmsTitle: {
     fontSize: 20,
@@ -444,7 +443,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   loadingContainer: {
-    flex: 0.68,
+    flex: 0.8,
     justifyContent: 'center',
     alignItems: 'center',
   },

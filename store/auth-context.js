@@ -66,7 +66,6 @@ function AuthContextProvider({ children }) {
           status: 'offline'
         });
       }
-
       setAuthToken(null);
       AsyncStorage.removeItem('token');
       setIsAuthenticated(false);
