@@ -60,10 +60,7 @@ const App = () => {
       const binanceResponse = await fetch('https://api.binance.com/api/v3/ticker/price');
       const binanceData = await binanceResponse.json();
 
-      const bybitResponse = await fetch('https://api.bybit.com/v2/public/tickers');
-      const bybitData = await bybitResponse.json();
-
-      const maxDifferencePair = findMaxPriceDifference(kucoinData.data.ticker, binanceData, bybitData.result);
+      const maxDifferencePair = findMaxPriceDifference(kucoinData.data.ticker, binanceData);
       setMaxPriceDifference(maxDifferencePair);
 
       setLoading(false);
@@ -73,7 +70,7 @@ const App = () => {
     }
   };
 
-  const findMaxPriceDifference = (kucoinData, binanceData, bybitData) => {
+  const findMaxPriceDifference = (kucoinData, binanceData) => {
     let maxDifference = null;
     let maxDifferencePair = null;
 
@@ -81,37 +78,29 @@ const App = () => {
     const secondExchangeSymbols = binanceData.map(item => item.symbol.replace('USDT', ''));
     let commonSymbols = firstExchangeSymbols.filter(symbol => secondExchangeSymbols.includes(symbol));
 
-    let filterSymbols = ['XMR', 'OGN', 'ORN', 'HNT'];
+    let filterSymbols = ["ETHDOWN","ETHUP","UNFI","LOOM","REEF","REN","KEY","OMG","HNT"];
 
     commonSymbols = commonSymbols.filter(symbol => !filterSymbols.includes(symbol));
 
     commonSymbols.forEach(symbol => {
       const kucoinItem = kucoinData.find(item => item.symbol === symbol + '-USDT');
       const binanceItem = binanceData.find(item => item.symbol === symbol + 'USDT');
-      const bybitItem = bybitData.find(item => item.symbol === symbol + 'USDT');
 
-      if (kucoinItem && binanceItem && bybitItem) {
+      if (kucoinItem && binanceItem) {
         const kucoinPrice = parseFloat(kucoinItem.last);
         const binancePrice = parseFloat(binanceItem.price);
-        const bybitPrice = parseFloat(bybitItem.last_price);
         const percentageDiffKB = calculatePercentageDifference(kucoinPrice, binancePrice);
-        const percentageDiffBY = calculatePercentageDifference(binancePrice, bybitPrice);
-        const percentageDiffYK = calculatePercentageDifference(bybitPrice, kucoinPrice);
 
-        if (percentageDiffKB < 50 || percentageDiffBY < 50 || percentageDiffYK < 50) {
-          const maxDiff = Math.max(percentageDiffKB, percentageDiffBY, percentageDiffYK);
-          if (maxDiff > 50) {
-            return;
-          }
-
+        if (percentageDiffKB < 50) {
+          const maxDiff = percentageDiffKB;
           if (maxDifference === null || maxDiff > maxDifference) {
             maxDifference = maxDiff;
             maxDifferencePair = {
               symbol: symbol,
-              higherPriceExchange: kucoinPrice > binancePrice && kucoinPrice > bybitPrice ? 'Kucoin' : binancePrice > kucoinPrice && binancePrice > bybitPrice ? 'Binance' : 'Bybit',
-              higherPrice: Math.max(kucoinPrice, binancePrice, bybitPrice),
-              lowerPriceExchange: kucoinPrice < binancePrice && kucoinPrice < bybitPrice ? 'Kucoin' : binancePrice < kucoinPrice && binancePrice < bybitPrice ? 'Binance' : 'Bybit',
-              lowerPrice: Math.min(kucoinPrice, binancePrice, bybitPrice),
+              higherPriceExchange: kucoinPrice > binancePrice ? 'Kucoin' : 'Binance',
+              higherPrice: Math.max(kucoinPrice, binancePrice),
+              lowerPriceExchange: kucoinPrice < binancePrice ? 'Kucoin' : 'Binance',
+              lowerPrice: Math.min(kucoinPrice, binancePrice),
               percentageDifference: maxDiff,
             };
           }
@@ -288,12 +277,19 @@ const App = () => {
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 2,
     backgroundColor: '#000000',
     padding: 20,
     paddingTop: 40,
+  },
+  alarmsContainer: {
+    paddingTop: 20,
+    flex: 0.93,
+    justifyContent: 'flex-end',
+    position: 'static',
   },
   notificationIcon: {
     alignSelf: 'flex-end',
@@ -411,12 +407,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10,
   },
-  alarmsContainer: {
-    paddingTop: 180,
-    flex: 0.91,
-    justifyContent: 'flex-end',
-    position: 'static',
-  },
+
   alarmsTitle: {
     fontSize: 20,
     fontWeight: 'bold',

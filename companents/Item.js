@@ -20,28 +20,38 @@ class Item extends PureComponent {
     errorMessage: '',
     currentPrice: null,
     symbolImage: null,
+    isDataAvailable: true,
   };
 
   componentDidMount() {
-    this.fetchData();
-    this.interval = setInterval(this.fetchData, 30000);
+    this.fetchInitialData(); // Uygulama ilk açıldığında veri çekecek
+    this.interval = setInterval(this.fetchCurrentPrice, 15000); // Fiyat bilgisini her 15 saniyede bir çekecek
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    clearInterval(this.interval); // Intervali temizle
   }
 
-  fetchData = async () => {
+  fetchInitialData = async () => {
     const { item } = this.props;
     try {
-      const response = await fetch(`https://s2.coinmarketcap.com/static/img/coins/64x64/${item.id}.png`);
-      this.setState({ symbolImage: response.url });
-
+      // Sadece simge ve grafik verilerini çekiyoruz
+      await this.fetchSymbolImage(item.id);
       await this.fetchChartData(item.symbol.toUpperCase());
+      // İlk başta fiyat verisini de çekiyoruz
       await this.fetchCurrentPrice(item.symbol.toUpperCase());
     } catch (error) {
       console.error("Veri alınırken bir hata oluştu:", error);
       this.setState({ errorMessage: 'Bir hata oluştu' });
+    }
+  };
+
+  fetchSymbolImage = async (id) => {
+    try {
+      const response = await fetch(`https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`);
+      this.setState({ symbolImage: response.url });
+    } catch (error) {
+      console.error("Simge alınırken bir hata oluştu:", error);
     }
   };
 
@@ -60,18 +70,25 @@ class Item extends PureComponent {
       });
       this.setState({ chartData: { prices } });
     } catch (error) {
-      console.error("Veri alınırken bir hata oluştu:", error);
+      console.error("Grafik verisi alınırken bir hata oluştu:", error);
       this.setState({ errorMessage: 'Bir hata oluştu' });
     }
   };
 
-  fetchCurrentPrice = async (symbol) => {
+  fetchCurrentPrice = async () => {
+    const { item } = this.props;
     try {
-      const response = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`);
+      const response = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${item.symbol.toUpperCase()}USDT`);
       const data = await response.json();
-      this.setState({ currentPrice: parseFloat(data.price) });
+      if (data.price) {
+        this.setState({ currentPrice: parseFloat(data.price), isDataAvailable: true });
+      } else {
+        // Eğer fiyat yoksa, veri yok olarak işaretleyin
+        this.setState({ isDataAvailable: false });
+      }
     } catch (error) {
-      console.error("Geçerli fiyat alınırken bir hata oluştu:", error);
+      console.error("Fiyat verisi alınırken bir hata oluştu:", error);
+      this.setState({ isDataAvailable: false });
     }
   };
 
@@ -81,12 +98,17 @@ class Item extends PureComponent {
 
   render() {
     const { item } = this.props;
-    const { expanded, chartData, errorMessage, currentPrice, symbolImage } = this.state;
+    const { expanded, chartData, errorMessage, currentPrice, symbolImage, isDataAvailable } = this.state;
     const chartWidth = Dimensions.get('window').width * 0.83;
-    const chartHeight = Dimensions.get('window').width * 0.55;
-    const labels = chartData ? chartData.prices.map(priceData => priceData[0]).filter((_, i) => i === i) : [];
-    const data = chartData ? chartData.prices.map(priceData => priceData[1]).filter((_, i) => i === i) : [];
+    const chartHeight = Dimensions.get('window').width * 0.49;
+    const labels = chartData ? chartData.prices.map(priceData => priceData[0]) : [];
+    const data = chartData ? chartData.prices.map(priceData => priceData[1]) : [];
     const formattedData = data.map(formatPrice);
+
+    // Eğer fiyat verisi yoksa, hiç bir şey render etme
+    if (!isDataAvailable) {
+      return null;
+    }
 
     return (
       <TouchableOpacity onPress={this.handlePress}>
@@ -118,7 +140,7 @@ class Item extends PureComponent {
           <View style={styles.graf}>
             {errorMessage ? (
               <View style={styles.errorContainer}>
-
+                <Text style={styles.errorText}>{errorMessage}</Text>
               </View>
             ) : expanded && chartData && chartData.prices && chartData.prices.length > 0 ? (
               <LineChart
