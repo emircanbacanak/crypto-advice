@@ -22,14 +22,14 @@ export default function SettingsScreen({ route }) {
           setUserSurname(userData.surname);
         }
       } catch (error) {
-        console.error('Kullanıcı verisi getirilirken hata oluştu:', error);
+        console.error('An error occurred while converting user data:', error);
       }
     };
 
     if (db) {
       fetchUserData();
     } else {
-      console.error('Firestore başlatılamadı!');
+      console.error('Firestore failed to start!');
     }
   }, [userEmail]);
 
@@ -37,9 +37,9 @@ export default function SettingsScreen({ route }) {
     try {
       await auth.signOut();
       navigation.navigate('Login');
-      console.log('Kullanıcı çıkış yaptı');
+      console.log('User logged out');
     } catch (error) {
-      console.error('Kullanıcı durumu güncellenirken bir hata oluştu:', error);
+      console.error('An error occurred while updating user status:', error);
     }
   };
 
@@ -51,14 +51,14 @@ export default function SettingsScreen({ route }) {
 
   return (
     <View style={{ backgroundColor: '#000000' }}>
-      <Text style={styles.baslik}>Profilim</Text>
+      <Text style={styles.baslik}>My Profile</Text>
 
       <View style={styles.inputContainer}>
 
         <View style={styles.underline}/>
 
         <View style={styles.inputRow}>
-          <Text style={styles.text}>Ad</Text>
+          <Text style={styles.text}>Name</Text>
           <Text style={styles.colon}>:</Text>
           <Text style={styles.input}>{userName}</Text>
         </View>
@@ -66,7 +66,7 @@ export default function SettingsScreen({ route }) {
         <View style={styles.underline}/>
 
         <View style={styles.inputRow}>
-          <Text style={styles.text}>Soyad</Text>
+          <Text style={styles.text}>Surname</Text>
           <Text style={styles.colon}>:</Text>
           <Text style={styles.input}>{userSurname}</Text>
         </View>
@@ -87,7 +87,7 @@ export default function SettingsScreen({ route }) {
             style={({ pressed }) => pressed && styles.pressed}
             onPress={handleSignOut}
           >
-            <Text style={styles.cikis}>ÇIKIŞ</Text>
+            <Text style={styles.cikis}>EXIT</Text>
           </Pressable>
         </View>
       </View>
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   text: {
-    flex: 0.17,
+    flex: 0.25,
     color: '#ffffff',
     fontSize: 20,
     fontWeight: 'bold',
