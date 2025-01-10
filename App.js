@@ -9,7 +9,7 @@ import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import ArbitrajScreen from './screens/Arbitraj';
 import ForgetPasswordScreen from './screens/forgetPassword';
-import RegisterScreen from './screens/Kayit';
+import RegisterScreen from './screens/RegisterScreen';
 import AuthContextProvider from './store/auth-context';
 import { auth } from './firebase';
 import FooterScreen from './screens/FooterScreen';
@@ -81,9 +81,9 @@ const AppNavigation = () => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
-        console.log("Kullanıcı oturum açmış");
+        console.log("User registration opened");
       } else {
-        console.log("Kullanıcı oturum açmamış");
+        console.log("User not logged in");
       }
     });
 
@@ -113,6 +113,6 @@ export const handleSignOut = () => {
   auth.signOut().then(() => {
     setIsAuthenticated(false);
   }).catch(error => {
-    console.error('Çıkış işlemi sırasında bir hata oluştu:', error);
+    console.error('An error occurred during the logout process:', error);
   });
 };

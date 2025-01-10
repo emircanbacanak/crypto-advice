@@ -24,25 +24,23 @@ class Item extends PureComponent {
   };
 
   componentDidMount() {
-    this.fetchInitialData(); // Uygulama ilk açıldığında veri çekecek
-    this.interval = setInterval(this.fetchCurrentPrice, 15000); // Fiyat bilgisini her 15 saniyede bir çekecek
+    this.fetchInitialData();
+    this.interval = setInterval(this.fetchCurrentPrice, 15000);
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval); // Intervali temizle
+    clearInterval(this.interval); 
   }
 
   fetchInitialData = async () => {
     const { item } = this.props;
     try {
-      // Sadece simge ve grafik verilerini çekiyoruz
       await this.fetchSymbolImage(item.id);
       await this.fetchChartData(item.symbol.toUpperCase());
-      // İlk başta fiyat verisini de çekiyoruz
       await this.fetchCurrentPrice(item.symbol.toUpperCase());
     } catch (error) {
-      console.error("Veri alınırken bir hata oluştu:", error);
-      this.setState({ errorMessage: 'Bir hata oluştu' });
+      console.error("An error occurred while retrieving data:", error);
+      this.setState({ errorMessage: 'An error occurred' });
     }
   };
 
@@ -51,7 +49,7 @@ class Item extends PureComponent {
       const response = await fetch(`https://s2.coinmarketcap.com/static/img/coins/64x64/${id}.png`);
       this.setState({ symbolImage: response.url });
     } catch (error) {
-      console.error("Simge alınırken bir hata oluştu:", error);
+      console.error("An error occurred while retrieving the token:", error);
     }
   };
 
@@ -60,7 +58,7 @@ class Item extends PureComponent {
       const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=${symbol}USDT&interval=1d&limit=7`);
       const data = await response.json();
       if (data.code === -1121) {
-        this.setState({ errorMessage: 'Veri yok' });
+        this.setState({ errorMessage: 'No data' });
         return;
       }
       const prices = data.map(item => {
@@ -70,8 +68,8 @@ class Item extends PureComponent {
       });
       this.setState({ chartData: { prices } });
     } catch (error) {
-      console.error("Grafik verisi alınırken bir hata oluştu:", error);
-      this.setState({ errorMessage: 'Bir hata oluştu' });
+      console.error("An error occurred while retrieving chart data:", error);
+      this.setState({ errorMessage: 'An error occurred' });
     }
   };
 
@@ -83,11 +81,10 @@ class Item extends PureComponent {
       if (data.price) {
         this.setState({ currentPrice: parseFloat(data.price), isDataAvailable: true });
       } else {
-        // Eğer fiyat yoksa, veri yok olarak işaretleyin
         this.setState({ isDataAvailable: false });
       }
     } catch (error) {
-      console.error("Fiyat verisi alınırken bir hata oluştu:", error);
+      console.error("An error occurred while retrieving price data:", error);
       this.setState({ isDataAvailable: false });
     }
   };
@@ -105,7 +102,6 @@ class Item extends PureComponent {
     const data = chartData ? chartData.prices.map(priceData => priceData[1]) : [];
     const formattedData = data.map(formatPrice);
 
-    // Eğer fiyat verisi yoksa, hiç bir şey render etme
     if (!isDataAvailable) {
       return null;
     }

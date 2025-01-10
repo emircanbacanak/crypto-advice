@@ -50,23 +50,23 @@ const Kayit = () => {
     });
 
     if (!name || !surname || !email || !password) {
-      Alert.alert('Uyarı', 'Boş giriş alanları bulunmaktadır.');
+      Alert.alert('Warning', 'There are empty input fields.');
       return;
     }
 
     if (emailError) {
-      Alert.alert('Uyarı', 'Geçerli bir e-posta adresi giriniz.');
+      Alert.alert('Warning', 'Please enter a valid e-mail address.');
       return;
     }
 
     try {
       const snapshot = await db.collection('Kullanicilar').where('email', '==', email).get();
       if (!snapshot.empty) {
-        Alert.alert('Uyarı', 'Bu e-posta adresi zaten kayıtlı.');
+        Alert.alert('Warning', 'This email address is already registered.');
         return;
       }
     } catch (error) {
-      console.error('Veritabanı hatası:', error);
+      console.error('database error:', error);
       return;
     }
 
@@ -79,13 +79,13 @@ const Kayit = () => {
         surname: surname,
         email: email,
       });
-      console.log("Kullanıcı kayıt oldu", user.email);
+      console.log("User registered", user.email);
       dispatch(setUserEmail(email));
       dispatch(setUserPassword(password));
       navigation.navigate("Home");
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
-        Alert.alert('Uyarı', 'Bu e-posta adresi zaten kayıtlı.');
+        Alert.alert('Warning', 'This email address is already registered.');
       } else {
         alert(error.message);
       }
@@ -99,14 +99,14 @@ const Kayit = () => {
       <View style={styles.container}>
         <ImageBackground source={{ uri: 'https://i.hizliresim.com/7g68l5i.jpg' }} style={styles.container}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-            <Text style={styles.backButtonText}>Geri</Text>
+            <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
-          <Text style={styles.title}>Kayıt Ol</Text>
+          <Text style={styles.title}>Sign Up</Text>
           <TextInput
             style={[styles.input, error.name && styles.errorInput]}
             autoCapitalize="sentences"
             autoCorrect={false}
-            placeholder="İsim"
+            placeholder="Name"
             selectionColor={"#FFFFFF39"}
             placeholderTextColor={"#ffffff"}
             onChangeText={(text) => setName(text)}
@@ -120,7 +120,7 @@ const Kayit = () => {
             autoCapitalize="sentences"
             autoCorrect={false}
             selectionColor={"#FFFFFF39"}
-            placeholder="Soyisim"
+            placeholder="Surname"
             placeholderTextColor={"#ffffff"}
             onChangeText={(text) => setSurname(text)}
             returnKeyType="next"
@@ -134,7 +134,7 @@ const Kayit = () => {
             autoCorrect={false}
             selectionColor={"#FFFFFF39"}
             keyboardType="email-address"
-            placeholder="E-Posta"
+            placeholder="E-mail"
             placeholderTextColor={"#ffffff"}
             onChangeText={(text) => setEmail(text)}
             returnKeyType="next"
@@ -148,7 +148,7 @@ const Kayit = () => {
               autoCapitalize="none"
               autoCorrect={false}
               selectionColor={"#FFFFFF39"}
-              placeholder="Şifre"
+              placeholder="Password"
               placeholderTextColor={"#ffffff"}
               secureTextEntry={!showPassword}
               onChangeText={(text) => setPassword(text)}
@@ -166,7 +166,7 @@ const Kayit = () => {
             style={[styles.button, styles.shadow]}
             onPress={handleSignUp}
           >
-            <Text style={styles.buttonText}>Kayıt Ol</Text>
+            <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
 
           {loading && (

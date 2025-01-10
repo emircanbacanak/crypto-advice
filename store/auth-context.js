@@ -70,7 +70,7 @@ function AuthContextProvider({ children }) {
       AsyncStorage.removeItem('token');
       setIsAuthenticated(false);
     } catch (error) {
-      console.error('Kullanıcı durumu güncellenirken bir hata oluştu:', error);
+      console.error('An error occurred while updating user status:', error);
     }
   };
 

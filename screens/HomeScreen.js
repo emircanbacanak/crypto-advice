@@ -37,9 +37,9 @@ const HomeScreen = () => {
 
       if (!response.ok) {
         if (response.status === 429) {
-          throw new Error("Çok fazla istek yapıldı. Bir süre bekleyin ve tekrar deneyin.");
+          throw new Error("Many requests have been made. Wait for a while and try again.");
         } else {
-          throw new Error("API'den geçersiz yanıt alındı: " + response.status);
+          throw new Error("Invalid response received from API: " + response.status);
         }
       }
 
@@ -57,8 +57,8 @@ const HomeScreen = () => {
         setData(data.data);
       }
     } catch (error) {
-      console.error("Veri alınırken hata oluştu:", error);
-      if (error.message.includes("Çok fazla istek yapıldı")) {
+      console.error("An error occurred while retrieving data:", error);
+      if (error.message.includes("Too many requests made")) {
         setTimeout(() => {
           fetchDataAndUpdate();
         }, 30000);
@@ -107,7 +107,7 @@ const HomeScreen = () => {
       {loading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#FFFFFF" />
-          <Text style={styles.loadingText}>Veriler Yükleniyor...</Text>
+          <Text style={styles.loadingText}>Loading Data...</Text>
         </View>
       ) : (
         <FlatList
@@ -119,8 +119,8 @@ const HomeScreen = () => {
           ListHeaderComponent={
             <>
               <View style={styles.welcome}>
-                <Text style={styles.subtitle}>Borsa Güncel Bilgileri</Text>
-                {isActive && <Text style={styles.lastUpdated}>Son Güncelleme: {lastUpdated}</Text>}
+                <Text style={styles.subtitle}>Stock Exchange Information</Text>
+                {isActive && <Text style={styles.lastUpdated}>Last Update: {lastUpdated}</Text>}
               </View>
               <View>
                 <SearchBar searchText={searchText} setSearchText={setSearchText} />

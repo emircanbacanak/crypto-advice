@@ -11,21 +11,21 @@ const ForgetPassword = () => {
   const handleResetPassword = async () => {
     const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     if (!isValidEmail) {
-      Alert.alert('Uyarı', 'Geçerli bir e-posta adresi giriniz.');
+      Alert.alert('Warning', 'Please enter a valid email address.');
       setEmailError(true);
       return;
     }
     try {
       const snapshot = await db.collection('Kullanicilar').where('email', '==', email).get();
       if (snapshot.empty) {
-        Alert.alert('Uyarı', 'Bu e-posta adresine kayıtlı bir hesap bulunamadı.');
+        Alert.alert('Warning', 'An account registered in these email records was incorrect.');
         return;
       }
       await auth.sendPasswordResetEmail(email);
-      Alert.alert('Başarılı', 'Şifre sıfırlama e-postası gönderildi.');
+      Alert.alert('Successful', 'A password reset email has been sent.');
     } catch (error) {
-      console.error("Şifre sıfırlama e-postası gönderilirken bir hata oluştu:", error);
-      Alert.alert('Hata', 'Şifre sıfırlama e-postası gönderilirken bir hata oluştu.');
+      console.error("An error occurred while sending the password reset email:", error);
+      Alert.alert('error', 'An error occurred while sending the password reset email.');
     }
   };
 
@@ -33,12 +33,12 @@ const ForgetPassword = () => {
     <ImageBackground source={{ uri: 'https://i.hizliresim.com/7g68l5i.jpg' }} >
       <View style={styles.container}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.backButtonText}>Geri</Text>
+          <Text style={styles.backButtonText}>Back</Text>
         </TouchableOpacity>
-        <Text style={styles.title}>Şifremi Unuttum</Text>
+        <Text style={styles.title}>Forgot Password</Text>
         <TextInput
           style={styles.input}
-          placeholder="E-posta adresinizi girin"
+          placeholder="Enter your email address"
           placeholderTextColor="#FFFFFFAD"
           color="#FFFFFF"
           selectionColor={"#FFFFFF39"}
@@ -47,7 +47,7 @@ const ForgetPassword = () => {
           keyboardType="email-address"
         />
         <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
-          <Text style={styles.buttonText}>Şifremi Sıfırla</Text>
+          <Text style={styles.buttonText}>Reset My Password</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>

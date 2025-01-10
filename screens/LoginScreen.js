@@ -28,14 +28,14 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     if (!password.trim()) {
-      Alert.alert('Uyarı', 'Şifre boş olamaz.');
+      Alert.alert('Warning', 'Password cannot be empty.');
       return;
     }
     try {
       const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
       if (!isValidEmail) {
         setEmailError(true);
-        Alert.alert('Uyarı', 'Geçerli bir e-posta adresi giriniz.');
+        Alert.alert('Warning', 'Please enter a valid email address.');
         return;
       }
 
@@ -51,10 +51,10 @@ const LoginScreen = () => {
       navigation.navigate('Home');
     } catch (error) {
       if (error.code === 'auth/invalid-credential') {
-        Alert.alert('Uyarı', 'Giriş yapılamadı. Lütfen bilgilerinizi kontrol edin.');
+        Alert.alert('Uyarı', 'Failed to log in. Please check your information.');
       } else {
         console.error('Giriş hatası: ', error);
-        Alert.alert('Uyarı', 'Giriş yapılamadı. Lütfen bilgilerinizi kontrol edin.');
+        Alert.alert('Uyarı', 'Failed to log in. Please check your information.');
       }
     } finally {
       setLoading(false);
@@ -68,7 +68,7 @@ const LoginScreen = () => {
   return (
     <View style={styles.container}>
       <ImageBackground source={{ uri: 'https://i.hizliresim.com/7g68l5i.jpg' }} style={styles.container}>
-        <Text style={styles.title}>Hoşgeldiniz</Text>
+        <Text style={styles.title}>Welcome</Text>
         <TextInput
           style={[styles.input, emailError && styles.errorInput]}
           autoCorrect={false}
@@ -88,7 +88,7 @@ const LoginScreen = () => {
             ref={passwordRef}
             style={[styles.passwordInput, emailError && styles.errorInput]}
             autoCorrect={false}
-            placeholder="Şifre"
+            placeholder="Password"
             placeholderTextColor='#FFFFFF'
             secureTextEntry={!showPassword}
             onChangeText={(text) => setPassword(text)}
@@ -105,10 +105,10 @@ const LoginScreen = () => {
         </View>
         <View style={styles.subtitle}>
           <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('Signup')}>
-            <Text style={styles.subtitleText}>Kayıt Ol</Text>
+            <Text style={styles.subtitleText}>Sign Up</Text>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.8} onPress={handleForgetPassword}>
-            <Text style={styles.subtitleText}>Şifremi Unuttum</Text>
+            <Text style={styles.subtitleText}>Forgot Password</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity
@@ -116,7 +116,7 @@ const LoginScreen = () => {
           style={[styles.button, styles.shadow]}
           onPress={handleLogin}
         >
-          <Text style={styles.buttonText}>Giriş Yap</Text>
+          <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
         {loading && (
           <View style={styles.overlay}>

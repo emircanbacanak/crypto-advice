@@ -45,7 +45,7 @@ const App = () => {
         dispatch(setUserEmail(email));
       }
     } catch (error) {
-      console.error('E-posta alınamadı:', error);
+      console.error('Could not receive email:', error);
     }
   };
 
@@ -65,7 +65,7 @@ const App = () => {
 
       setLoading(false);
     } catch (error) {
-      console.error('Veri çekme hatası:', error);
+      console.error('Data extraction error:', error);
       setLoading(false);
     }
   };
@@ -124,7 +124,7 @@ const App = () => {
         }
       }
     } catch (error) {
-      console.error('Alarmlar yüklenemedi:', error);
+      console.error('Failed to load alarms:', error);
     }
   };
 
@@ -134,7 +134,7 @@ const App = () => {
         await AsyncStorage.setItem(`alarms_${userEmail}`, JSON.stringify(newAlarms));
       }
     } catch (error) {
-      console.error('Alarmlar kaydedilemedi:', error);
+      console.error('Alarms could not be recorded:', error);
     }
   };
 
@@ -192,27 +192,27 @@ const App = () => {
               <TouchableOpacity style={styles.closeButton} onPress={toggleModal}>
                 <Icon name="close" size={25} color="#ffffff" />
               </TouchableOpacity>
-              <Text style={styles.modalText}>Yüzdelik Fark Girin</Text>
+              <Text style={styles.modalText}>Enter Percentage Difference</Text>
               <TextInput
                 style={styles.modalInput}
                 keyboardType="numeric"
                 value={percentageDifference}
                 onChangeText={text => setPercentageDifference(text)}
-                placeholder="Yüzdelik Fark"
+                placeholder="Percentage Difference"
                 placeholderTextColor="#aaaaaa"
               />
               <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-                  <Text style={styles.buttonText}>Kaydet</Text>
+                  <Text style={styles.buttonText}>Save</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
-                  <Text style={styles.buttonText}>İptal</Text>
+                  <Text style={styles.buttonText}>Cancel</Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
         </Modal>
-        <Text style={styles.title}>En Yüksek Fiyat Farkı</Text>
+        <Text style={styles.title}>Highest Price Difference</Text>
         {loading ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#ffffff" />
@@ -237,25 +237,25 @@ const App = () => {
                 keyboardType="numeric"
                 value={transactionAmount}
                 onChangeText={setTransactionAmount}
-                placeholder="İşlem Tutarı"
+                placeholder="Transaction Amount"
                 placeholderTextColor="#aaaaaa"
               />
               <TouchableOpacity style={styles.calculateButton} onPress={calculateTransaction}>
-                <Text style={styles.buttonText}>Hesapla</Text>
+                <Text style={styles.buttonText}>Calculate</Text>
               </TouchableOpacity>
             </View>
             {calculatedAmount !== null && (
-              <Text style={styles.calculatedAmount}>Kazanç: {calculatedAmount} USDT</Text>
+              <Text style={styles.calculatedAmount}>Earning: {calculatedAmount} USDT</Text>
             )}
           </>
         ) : (
-          <Text style={styles.noDataText}>Veri bulunamadı</Text>
+          <Text style={styles.noDataText}>No data found</Text>
         )}
 
         <View style={styles.alarmsContainer}>
-          <Text style={styles.alarmsTitle}>Alarm Listesi</Text>
+          <Text style={styles.alarmsTitle}>Alarm List</Text>
           {alarms.length === 0 ? (
-            <Text style={styles.noAlarmsText}>Kayıtlı alarm yok</Text>
+            <Text style={styles.noAlarmsText}>No alarms</Text>
           ) : (
             <FlatList
               data={alarms}
